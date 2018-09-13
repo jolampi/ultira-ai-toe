@@ -5,19 +5,12 @@
  */
 package ultirai;
 
-import java.util.Scanner;
-
 /**
  *
  * @author Jori Lampi
  */
-public class Main {
+public interface Player {
     
-    public static void main(String[] args) {
-        
-        Player player = new ScannerPlayer(new Scanner(System.in));
-        Game game = new Game(player, player);
-        game.play();
-    }
+    public int move(String board);
     
 }

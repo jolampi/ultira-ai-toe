@@ -5,19 +5,12 @@
  */
 package ultirai;
 
-import java.util.Scanner;
-
 /**
  *
  * @author Jori Lampi
  */
-public class Main {
+public enum Mark {
     
-    public static void main(String[] args) {
-        
-        Player player = new ScannerPlayer(new Scanner(System.in));
-        Game game = new Game(player, player);
-        game.play();
-    }
+    CROSS, NOUGHT, NONE
     
 }
