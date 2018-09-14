@@ -13,17 +13,21 @@ public class UltimateTicTacToe extends TicTacToe {
     
     private final static int SIZE = 3;
     
-    private TicTacToe activeSubBoard;
+    private int activeX;
+    private int activeY;
     private final TicTacToe[][] board;
     
     public UltimateTicTacToe() {
         super();
-        this.activeSubBoard = null;
+        this.activeX = -1;
+        this.activeY = -1;
         this.board = new TicTacToe[SIZE][SIZE];
         for (TicTacToe[] row : this.board) {
             for (int i = 0; i < row.length; i++) { row[i] = new TicTacToe(); }
         }
     }
+    
+    public boolean isBoardChosen() { return activeX >= 0 && activeY >= 0; }
     
     @Override
     public String[] rows() {
@@ -48,12 +52,16 @@ public class UltimateTicTacToe extends TicTacToe {
     
     @Override
     public void set(int x, int y, Mark mark) {
-        if (activeSubBoard == null) {
-            activeSubBoard = board[y][x];
+        if (isBoardChosen()) {
+            board[activeY][activeX].set(x, y, mark);
+            if (board[activeY][activeX].evaluate() == mark) { super.set(activeX, activeY, mark); }
+        }
+        if (super.get(x, y) == Mark.NONE) {
+            activeX = x;
+            activeY = y;
         } else {
-            activeSubBoard.set(x, y, mark);
-//            if (activeSubBoard.evaluate() == mark) { super.set(x, y, mark); }
-            activeSubBoard = (super.get(x, y) == Mark.NONE) ? board[y][x] : null;
+            activeX = -1;
+            activeY = -1;
         }
     }
     

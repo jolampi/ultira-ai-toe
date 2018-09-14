@@ -1,5 +1,7 @@
+.gradle/
 /ultira-ai-toe/.gradle/
 /ultira-ai-toe/.nb-gradle/
 /ultira-ai-toe/build/
+/ultira-ai-toe/nbproject/
 /ultira-ai-toe/build.gradle
 /ultira-ai-toe/settings.gradle

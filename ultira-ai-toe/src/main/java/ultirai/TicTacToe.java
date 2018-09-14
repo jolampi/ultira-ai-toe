@@ -12,6 +12,7 @@ package ultirai;
 public class TicTacToe {
     
     private final static int SIZE = 3;
+    private final static int WIN_REQUIREMENT = 3;
     
     private final Mark[][] board;
 
@@ -20,11 +21,44 @@ public class TicTacToe {
         clearBoard();
     }
     
+    public int getSize() { return SIZE; }
+    
     public void set(int x, int y, Mark mark) { board[y][x] = mark; }
     
     public Mark get(int x, int y) { return board[y][x]; }
     
     public Mark evaluate() {
+        Mark mark;
+        for (int i = 0; i < SIZE; i++) {
+            if ((mark = evaluateRow(i, 0, 1, 0)) != Mark.NONE) { return mark; }
+            if ((mark = evaluateRow(0, i, 0, 1)) != Mark.NONE) { return mark; }
+        }
+        // diagonal rows
+        if ((mark = evaluateRow(0, 0, 1, 1)) != Mark.NONE) { return mark; }
+        if ((mark = evaluateRow(SIZE-1, 0, -1, 1)) != Mark.NONE) { return mark; }
+        /* required block if the WIN_REQUIREMENT is less than a board's dimension. Untested ATM
+        for (int i = 1; i <= SIZE - WIN_REQUIREMENT; i++) {
+            if ((mark = evaluateRow(i, 0, 1, 1)) != Mark.NONE) { return mark; }
+            if ((mark = evaluateRow(0, i, 1, 1)) != Mark.NONE) { return mark; }
+            if ((mark = evaluateRow(SIZE-1, i, -1, 1)) != Mark.NONE) { return mark; }
+            if ((mark = evaluateRow(SIZE-1-i, 0, -1, 1)) != Mark.NONE) { return mark; }
+        }*/
+        return Mark.NONE;
+    }
+    
+    private Mark evaluateRow(int x, int y, int dx, int dy) {
+        Mark value = Mark.NONE;
+        int count = 0;
+        while (0 <= y && y < board.length && 0 <= x && x < board[y].length) {
+            if (value == board[y][x]) {
+                if (++count == WIN_REQUIREMENT) { return value; }
+            } else {
+                value = board[y][x];
+                count = 1;
+            }
+            x += dx;
+            y += dy;
+        }
         return Mark.NONE;
     }
     

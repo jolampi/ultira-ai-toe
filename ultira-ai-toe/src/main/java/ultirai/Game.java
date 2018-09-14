@@ -11,21 +11,25 @@ package ultirai;
  */
 public class Game {
     
-    private final UltimateTicTacToe board;
+    private final UltimateTicTacToe game;
     private final Player player1;
     private final Player player2;
     
     public Game(Player player1, Player player2) {
-        this.board = new UltimateTicTacToe();
+        this.game = new UltimateTicTacToe();
         this.player1 = player1;
         this.player2 = player2;
     }
     
     public void play() {
-        while (true) {
-            int move = player1.move(board.toString());
-            board.set(move, Mark.CROSS);
-        }
+        boolean turn = true;
+        do {
+            boolean boardChosen = game.isBoardChosen();
+            Player player = (turn) ? player1 : player2;
+            int move = player.move(game.toString());
+            game.set(move, (turn) ? Mark.CROSS : Mark.NOUGHT);
+            if (boardChosen) { turn = !turn; }
+        } while (game.evaluate() == Mark.NONE);
     }
     
 }
