@@ -11,8 +11,6 @@ package ultirai;
  */
 public class UltimateTicTacToe extends TicTacToe {
     
-    private final static int SIZE = 3;
-    
     private int activeX;
     private int activeY;
     private final TicTacToe[][] board;
@@ -21,7 +19,7 @@ public class UltimateTicTacToe extends TicTacToe {
         super();
         this.activeX = -1;
         this.activeY = -1;
-        this.board = new TicTacToe[SIZE][SIZE];
+        this.board = new TicTacToe[getSize()][getSize()];
         for (TicTacToe[] row : this.board) {
             for (int i = 0; i < row.length; i++) { row[i] = new TicTacToe(); }
         }
@@ -44,11 +42,6 @@ public class UltimateTicTacToe extends TicTacToe {
             }
         }
         return array;
-    }
-    
-    public void set(int n, Mark mark) {
-        n--;
-        set(n%SIZE, n/SIZE, mark);
     }
     
     @Override

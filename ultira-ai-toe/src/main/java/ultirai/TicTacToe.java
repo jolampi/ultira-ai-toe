@@ -18,10 +18,16 @@ public class TicTacToe {
 
     public TicTacToe() {
         this.board = new Mark[SIZE][SIZE];
-        clearBoard();
+        for (Mark[] row : board) {
+            for (int x = 0; x < row.length; x++) {
+                row[x] = Mark.NONE;
+            }
+        }
     }
     
     public int getSize() { return SIZE; }
+    
+    public void set(int n, Mark mark) { set(--n%getSize(), n/getSize(), mark); }
     
     public void set(int x, int y, Mark mark) { board[y][x] = mark; }
     
@@ -62,8 +68,6 @@ public class TicTacToe {
         return Mark.NONE;
     }
     
-    public void clear() { clearBoard(); }
-    
     public char[][] toCharArray() { return toCharArray('X', 'O', '.'); }
     
     public char[][] toCharArray(char cross, char nought, char none) {
@@ -78,14 +82,6 @@ public class TicTacToe {
             }
         }
         return array;
-    }
-    
-    private void clearBoard() {
-        for (Mark[] row : board) {
-            for (int x = 0; x < row.length; x++) {
-                row[x] = Mark.NONE;
-            }
-        }
     }
     
     @Override
