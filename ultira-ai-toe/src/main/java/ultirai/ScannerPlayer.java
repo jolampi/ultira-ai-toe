@@ -20,8 +20,8 @@ public class ScannerPlayer implements Player {
     }
 
     @Override
-    public int move(String board) {
-        System.out.println(board);
+    public int move(GameState gameState) {
+        System.out.println(gameState.toString());
         return scanner.nextInt();
     }
     

@@ -25,6 +25,10 @@ public class UltimateTicTacToe extends TicTacToe {
         }
     }
     
+    public int getActiveBoardIndex() {
+        return activeY * getSize() + activeX + 1;
+    }
+    
     public boolean isBoardChosen() { return activeX >= 0 && activeY >= 0; }
     
     @Override
@@ -57,23 +61,6 @@ public class UltimateTicTacToe extends TicTacToe {
             activeX = -1;
             activeY = -1;
         }
-    }
-    
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        char[][] array = toCharArray();
-        for (int y = 0; y < array.length; y++) {
-            for (int x = 0; x < array[y].length; x++) {
-                sb.append(array[y][x]);
-                if (x < array[y].length - 1 && x % getSize() == 2) { sb.append(' '); }
-            }
-            if (y < array.length - 1) {
-                sb.append('\n');
-                if (y % getSize() == 2) { sb.append('\n'); }
-            }
-        }
-        return sb.toString();
     }
     
 }

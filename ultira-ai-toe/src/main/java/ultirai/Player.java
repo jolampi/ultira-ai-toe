@@ -11,6 +11,6 @@ package ultirai;
  */
 public interface Player {
     
-    public int move(String board);
+    public int move(GameState gameState);
     
 }
