@@ -9,4 +9,8 @@ Time spent this week (rough estimate): 9 hours.
 
 # Week 2
 
-The proximity of the second deadline has resulted into not not reaching all the milestones this week. The main focus was presenting the status of a game to user.
+The proximity of the first two deadlines has resulted into not reaching all the milestones this week. The main focus was to reach a stage where two humans can play agains each other while having some basic visual presentation of the game. The current version still requires some bug fixing and general cleaning before it makes sense to start writing javadocs.
+
+JaCoCo took some while to set up due to a lack of practice, but I did manage to figure it out in the end. The main issue was probably going with Gradle in favor of Maven, which I wasn't that proficient with using Netbeans.
+
+Time spent this week: 7 hours.
