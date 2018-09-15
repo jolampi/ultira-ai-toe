@@ -64,20 +64,20 @@ public class TicTacToe {
     
     public void clear() { clearBoard(); }
     
-    public String[] rows() {
-        String[] rows = new String[SIZE];
-        for (int i = 0; i < SIZE; i++) {
-            StringBuilder sb = new StringBuilder(SIZE);
-            for (Mark m : board[i]) {
-                switch (m) {
-                    case CROSS: sb.append('X'); break;
-                    case NOUGHT: sb.append('O'); break;
-                    default: sb.append('.');
+    public char[][] toCharArray() { return toCharArray('X', 'O', '.'); }
+    
+    public char[][] toCharArray(char cross, char nought, char none) {
+        char[][] array = new char[SIZE][SIZE];
+        for (int y = 0; y < SIZE; y++) {
+            for (int x = 0; x < SIZE; x++) {
+                switch (board[y][x]) {
+                    case CROSS: array[y][x] = cross; break;
+                    case NOUGHT: array[y][x] = nought; break;
+                    default: array[y][x] = none;
                 }
             }
-            rows[i] = sb.toString();
         }
-        return rows;
+        return array;
     }
     
     private void clearBoard() {
@@ -91,8 +91,12 @@ public class TicTacToe {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder(SIZE * (SIZE + 1));
-        for (String s : rows()) { sb.append(s).append('\n'); }
-        return sb.deleteCharAt(sb.length() - 1).toString();
+        int rowCount = 0;
+        for (char[] row : toCharArray()) {
+            sb.append(row);
+            if (rowCount++ < SIZE) { sb.append('\n'); }
+        }
+        return sb.toString();
     }
     
 }

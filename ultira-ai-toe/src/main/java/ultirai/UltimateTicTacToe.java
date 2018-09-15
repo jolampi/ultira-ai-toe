@@ -30,19 +30,20 @@ public class UltimateTicTacToe extends TicTacToe {
     public boolean isBoardChosen() { return activeX >= 0 && activeY >= 0; }
     
     @Override
-    public String[] rows() {
-        String[] rows = new String[SIZE];
-        for (int y = 0; y < SIZE; y++) {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < SIZE; i++) {
-                for (int x = 0; x < SIZE; x++) {
-                    sb.append(board[y][x].rows()[i]).append(' ');
+    public char[][] toCharArray(char cross, char nought, char none) {
+        int size = getSize();
+        char[][] array = new char[size*size][size*size];
+        for (int y = 0; y < size; y++) {
+            int offsetY = y * size;
+            for (int x = 0; x < size; x++) {
+                int offsetX = x * size;
+                char[][] subArray = board[y][x].toCharArray(cross, nought, none);
+                for (int z = 0; z < subArray.length; z++) {
+                    System.arraycopy(subArray[z], 0, array[offsetY+z], offsetX, size);
                 }
-                sb.append('\n');
             }
-            rows[y] = sb.toString();
         }
-        return rows;
+        return array;
     }
     
     public void set(int n, Mark mark) {
@@ -68,8 +69,18 @@ public class UltimateTicTacToe extends TicTacToe {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (String s : rows()) { sb.append(s).append('\n'); }
-        return sb.deleteCharAt(sb.length() - 1).toString();
+        char[][] array = toCharArray();
+        for (int y = 0; y < array.length; y++) {
+            for (int x = 0; x < array[y].length; x++) {
+                sb.append(array[y][x]);
+                if (x < array[y].length - 1 && x % getSize() == 2) { sb.append(' '); }
+            }
+            if (y < array.length - 1) {
+                sb.append('\n');
+                if (y % getSize() == 2) { sb.append('\n'); }
+            }
+        }
+        return sb.toString();
     }
     
 }
