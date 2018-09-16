@@ -18,11 +18,7 @@ public class TicTacToe {
 
     public TicTacToe() {
         this.board = new Mark[SIZE][SIZE];
-        for (Mark[] row : board) {
-            for (int x = 0; x < row.length; x++) {
-                row[x] = Mark.NONE;
-            }
-        }
+        clear();
     }
     
     public int getSize() { return SIZE; }
@@ -36,8 +32,8 @@ public class TicTacToe {
     public Mark evaluate() {
         Mark mark;
         for (int i = 0; i < SIZE; i++) {
-            if ((mark = evaluateRow(i, 0, 1, 0)) != Mark.NONE) { return mark; }
-            if ((mark = evaluateRow(0, i, 0, 1)) != Mark.NONE) { return mark; }
+            if ((mark = evaluateRow(0, i, 1, 0)) != Mark.NONE) { return mark; }
+            if ((mark = evaluateRow(i, 0, 0, 1)) != Mark.NONE) { return mark; }
         }
         // diagonal rows
         if ((mark = evaluateRow(0, 0, 1, 1)) != Mark.NONE) { return mark; }
@@ -53,19 +49,29 @@ public class TicTacToe {
     }
     
     private Mark evaluateRow(int x, int y, int dx, int dy) {
-        Mark value = Mark.NONE;
+        Mark mark = Mark.NONE;
         int count = 0;
-        while (0 <= y && y < board.length && 0 <= x && x < board[y].length) {
-            if (value == board[y][x]) {
-                if (++count == WIN_REQUIREMENT) { return value; }
+        while (0 <= y && y < SIZE && 0 <= x && x < SIZE) {
+            if (mark == board[y][x]) {
+                if (++count == WIN_REQUIREMENT) { return mark; }
             } else {
-                value = board[y][x];
+                mark = board[y][x];
                 count = 1;
             }
             x += dx;
             y += dy;
         }
         return Mark.NONE;
+    }
+    
+    public void clearBoard() { clear(); }
+    
+    private void clear() {
+        for (Mark[] row : board) {
+            for (int x = 0; x < row.length; x++) {
+                row[x] = Mark.NONE;
+            }
+        }
     }
     
     public char[][] toCharArray() { return toCharArray('X', 'O', '.'); }

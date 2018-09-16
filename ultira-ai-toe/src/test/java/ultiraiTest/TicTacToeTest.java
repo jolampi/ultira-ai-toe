@@ -5,6 +5,7 @@
  */
 package ultiraiTest;
 
+import java.util.Arrays;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -39,39 +40,44 @@ public class TicTacToeTest {
     @After
     public void tearDown() {
     }
-
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
-    
-    @Test
-    public void NoWinnerAtStart() {
-        TicTacToe ttt = new TicTacToe();
-        Assert.assertEquals(ttt.evaluate(), Mark.NONE);
-    }
     
     @Test
     public void WinningEvaluationWorks() {
         TicTacToe ttt = new TicTacToe();
-        Assert.assertEquals(ttt.evaluate(), Mark.NONE);
-        for (int i = 0; i < ttt.getSize(); i++) {
-            ttt.set(i, 0, Mark.CROSS);
+        int size = ttt.getSize();
+        Assert.assertEquals("Start of game", Mark.NONE, ttt.evaluate());
+        for (int r = 0; r < size; r++) {
+            for (int i = 0; i < size; i++) {
+                ttt.set(i, r, Mark.CROSS);
+            }
+            Assert.assertEquals("Horizontal row " + r + " winner", Mark.CROSS, ttt.evaluate());
+            for (int i = 0; i < size; i++) {
+                ttt.set(r, i, Mark.NOUGHT);
+            }
+            Assert.assertEquals("Vertical row " + r + " winner", Mark.NOUGHT, ttt.evaluate());
+            ttt.clearBoard();
         }
-        Assert.assertEquals(ttt.evaluate(), Mark.CROSS);
-        for (int i = 0; i < ttt.getSize(); i++) {
-            ttt.set(0, i, Mark.NOUGHT);
-        }
-        Assert.assertEquals(ttt.evaluate(), Mark.NOUGHT);
-        for (int i = 0; i < ttt.getSize(); i++) {
+        ttt.clearBoard();
+        for (int i = 0; i < size; i++) {
             ttt.set(i, i, Mark.CROSS);
         }
-        Assert.assertEquals(ttt.evaluate(), Mark.CROSS);
-        for (int i = 0; i < ttt.getSize(); i++) {
-            ttt.set(ttt.getSize()-1-i, i, Mark.NOUGHT);
+        Assert.assertEquals("Diagonal row \\ winner", Mark.CROSS, ttt.evaluate());
+        for (int i = 0; i < size; i++) {
+            ttt.set(size-1-i, i, Mark.NOUGHT);
         }
-        Assert.assertEquals(ttt.evaluate(), Mark.NOUGHT);
+        Assert.assertEquals("Diagonal row / winner", Mark.NOUGHT, ttt.evaluate());
+        ttt.clearBoard();
+        Assert.assertEquals("Board cleared winner", Mark.NONE, ttt.evaluate());
+    }
+    
+    @Test
+    public void CharacterArrayTest() {
+        TicTacToe ttt = new TicTacToe();
+        ttt.set(0, 0, Mark.CROSS);
+        Assert.assertArrayEquals(new char[][] {{'X','.','.'},{'.','.','.'},{'.','.','.'}}, ttt.toCharArray());
+        ttt.set(1, 0, Mark.CROSS);
+        ttt.set(2, 2, Mark.NOUGHT);
+        Assert.assertArrayEquals(new char[][] {{'x','x',' '},{' ',' ',' '},{' ',' ','o'}}, ttt.toCharArray('x', 'o', ' '));
     }
     
 }
