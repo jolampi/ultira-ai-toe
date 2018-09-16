@@ -49,9 +49,11 @@ public class UltimateTicTacToe extends TicTacToe {
     }
     
     @Override
-    public void set(int x, int y, Mark mark) {
+    public boolean set(int x, int y, Mark mark) {
+        boolean success = false;
         if (isBoardChosen()) {
-            board[activeY][activeX].set(x, y, mark);
+            success = board[activeY][activeX].set(x, y, mark);
+            if (!success) { return false; }
             if (board[activeY][activeX].evaluate() == mark) { super.set(activeX, activeY, mark); }
         }
         if (super.get(x, y) == Mark.NONE) {
@@ -61,6 +63,7 @@ public class UltimateTicTacToe extends TicTacToe {
             activeX = -1;
             activeY = -1;
         }
+        return success;
     }
     
 }

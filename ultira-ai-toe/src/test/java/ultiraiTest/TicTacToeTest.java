@@ -5,14 +5,12 @@
  */
 package ultiraiTest;
 
-import java.util.Arrays;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import ultirai.Mark;
 import ultirai.TicTacToe;
 
@@ -51,6 +49,7 @@ public class TicTacToeTest {
                 ttt.set(i, r, Mark.CROSS);
             }
             Assert.assertEquals("Horizontal row " + r + " winner", Mark.CROSS, ttt.evaluate());
+            ttt.clearBoard();
             for (int i = 0; i < size; i++) {
                 ttt.set(r, i, Mark.NOUGHT);
             }
@@ -62,19 +61,18 @@ public class TicTacToeTest {
             ttt.set(i, i, Mark.CROSS);
         }
         Assert.assertEquals("Diagonal row \\ winner", Mark.CROSS, ttt.evaluate());
+        ttt.clearBoard();
         for (int i = 0; i < size; i++) {
             ttt.set(size-1-i, i, Mark.NOUGHT);
         }
         Assert.assertEquals("Diagonal row / winner", Mark.NOUGHT, ttt.evaluate());
-        ttt.clearBoard();
-        Assert.assertEquals("Board cleared winner", Mark.NONE, ttt.evaluate());
     }
     
     @Test
     public void CharacterArrayTest() {
         TicTacToe ttt = new TicTacToe();
         ttt.set(0, 0, Mark.CROSS);
-        Assert.assertArrayEquals(new char[][] {{'X','.','.'},{'.','.','.'},{'.','.','.'}}, ttt.toCharArray());
+        Assert.assertArrayEquals(new char[][] {{'x','.','.'},{'.','.','.'},{'.','.','.'}}, ttt.toCharArray('x', 'o', '.'));
         ttt.set(1, 0, Mark.CROSS);
         ttt.set(2, 2, Mark.NOUGHT);
         Assert.assertArrayEquals(new char[][] {{'x','x',' '},{' ',' ',' '},{' ',' ','o'}}, ttt.toCharArray('x', 'o', ' '));

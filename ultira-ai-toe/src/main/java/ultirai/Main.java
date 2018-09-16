@@ -5,6 +5,7 @@
  */
 package ultirai;
 
+import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -16,7 +17,8 @@ public class Main {
     public static void main(String[] args) {
         
         Player player = new ScannerPlayer(new Scanner(System.in));
-        Game game = new Game(player, player);
+        Player ai = new AIPlayer(new Random());
+        Game game = new Game(player, ai);
         game.play();
     }
     

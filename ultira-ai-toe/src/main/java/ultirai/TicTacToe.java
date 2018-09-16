@@ -23,9 +23,13 @@ public class TicTacToe {
     
     public int getSize() { return SIZE; }
     
-    public void set(int n, Mark mark) { set(--n%getSize(), n/getSize(), mark); }
+    public boolean set(int n, Mark mark) { return set(--n%getSize(), n/getSize(), mark); }
     
-    public void set(int x, int y, Mark mark) { board[y][x] = mark; }
+    public boolean set(int x, int y, Mark mark) {
+        if (board[y][x] != Mark.NONE) { return false; }
+        board[y][x] = mark;
+        return true;
+    }
     
     public Mark get(int x, int y) { return board[y][x]; }
     
@@ -74,7 +78,7 @@ public class TicTacToe {
         }
     }
     
-    public char[][] toCharArray() { return toCharArray('X', 'O', '.'); }
+    public char[][] toCharArray() { return toCharArray('X', 'O', ' '); }
     
     public char[][] toCharArray(char cross, char nought, char none) {
         char[][] array = new char[SIZE][SIZE];

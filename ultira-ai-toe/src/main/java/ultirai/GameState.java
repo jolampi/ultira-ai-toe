@@ -19,7 +19,7 @@ public class GameState {
     private final int hashCode;
     
     public GameState(UltimateTicTacToe ultimateTicTacToe) {
-        this.board = ultimateTicTacToe.toCharArray('X', 'O', '.');
+        this.board = ultimateTicTacToe.toCharArray();
         this.activeBoardIndex = ultimateTicTacToe.getActiveBoardIndex();
         this.size = ultimateTicTacToe.getSize();
         this.hashCode = countHash();
@@ -62,11 +62,11 @@ public class GameState {
         for (int y = 0; y < board.length; y++) {
             for (int x = 0; x < board[y].length; x++) {
                 sb.append(board[y][x]);
-                if (x < board[y].length - 1 && x % size == 2) { sb.append(' '); }
+                if (x < board[y].length - 1 && x % size == 2) { sb.append('|'); }
             }
             if (y < board.length - 1) {
                 sb.append('\n');
-                if (y % size == 2) { sb.append('\n'); }
+                if (y % size == 2) { sb.append("---+---+---\n"); }
             }
         }
         return sb.toString();
