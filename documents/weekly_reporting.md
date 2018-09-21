@@ -14,3 +14,12 @@ The proximity of the first two deadlines has resulted into not reaching all the 
 JaCoCo took some while to set up due to a lack of practice, but I did manage to figure it out in the end. The main issue was probably going with Gradle in favor of Maven, which I wasn't that proficient with using Netbeans.
 
 Time spent this week: 7 hours.
+
+
+# Week 3
+
+I'm starting to get the final picture of how the code should be structured. That basically means that a good amount of refactoring is on the way. The AI took less time than anticipated to get into a basic shape. I'm still working on the finer details of how a move should be selected in practise. Some test results also need to be verified before I can consider that part to be "working."
+
+After these two milestones I will shift the focus to implementing the data structures that currently work as wrappers. Working around Java's annoying lack of Generic arrays is not something I'm looking towards to. Creating Javadocs will also be finally sensible as I'm starting to finally settle with my methods.
+
+Time spent this week: 14 hours.
