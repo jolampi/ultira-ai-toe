@@ -18,8 +18,8 @@ Time spent this week: 7 hours.
 
 # Week 3
 
-I'm starting to get the final picture of how the code should be structured. That basically means that a good amount of refactoring is on the way. The AI took less time than anticipated to get into a basic shape. I'm still working on the finer details of how a move should be selected in practise. Some test results also need to be verified before I can consider that part to be "working."
+I'm starting to get the final picture of how the code should be structured. This basically means that a good amount of refactoring is on the way. The AI took less time than anticipated to get into a basic shape. I'm still working on the finer details of how a move should be selected in practise. Some test results also need to be verified before I can consider that part to be "working."
 
-After these two milestones I will shift the focus to implementing the data structures that currently work as wrappers. Working around Java's annoying lack of Generic arrays is not something I'm looking towards to. Creating Javadocs will also be finally sensible as I'm starting to finally settle with my methods.
+After these two milestones I will shift the focus to implementing the data structures that currently work as wrappers. Working around Java's annoying lack of Generic arrays is not something I'm looking forward to. Creating Javadocs will also be finally sensible as I'm starting to finally settle with my methods.
 
 Time spent this week: 14 hours.
