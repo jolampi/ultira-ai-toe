@@ -31,6 +31,13 @@ public class UltimateTicTacToe extends TicTacToe {
     
     public boolean isBoardChosen() { return activeX >= 0 && activeY >= 0; }
     
+    public boolean isValidMove(int index) {
+        index--;
+        int x = index % getSize();
+        int y = index / getSize();
+        return ((isBoardChosen()) ? board[activeY][activeX].get(x, y) : super.get(x, y)) == Mark.NONE;
+    }
+    
     @Override
     public char[][] toCharArray(char cross, char nought, char none) {
         int size = getSize();

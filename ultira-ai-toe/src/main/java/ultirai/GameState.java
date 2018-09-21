@@ -6,6 +6,7 @@
 package ultirai;
 
 import java.util.Arrays;
+import structure.List;
 
 /**
  *
@@ -17,12 +18,22 @@ public class GameState {
     private final int activeBoardIndex;
     private final int size;
     private final int hashCode;
+    private final List<Integer> validMoves;
     
     public GameState(UltimateTicTacToe ultimateTicTacToe) {
         this.board = ultimateTicTacToe.toCharArray();
         this.activeBoardIndex = ultimateTicTacToe.getActiveBoardIndex();
         this.size = ultimateTicTacToe.getSize();
         this.hashCode = countHash();
+        this.validMoves = findValidMoves(ultimateTicTacToe);
+    }
+    
+    private List<Integer> findValidMoves(UltimateTicTacToe uttt) {
+        List<Integer> validMoves = new List<Integer>();
+        for (int i = 1; i <= size*size; i++) {
+            if (uttt.isValidMove(i)) validMoves.add(i);
+        }
+        return validMoves;
     }
 
     private int countHash() {
@@ -31,6 +42,11 @@ public class GameState {
         hash = 59 * hash + this.activeBoardIndex;
         return hash;
     }
+    
+    public List<Integer> getValidMoves() {
+        return validMoves;
+    }
+    
     
     @Override
     public int hashCode() { return hashCode; }
