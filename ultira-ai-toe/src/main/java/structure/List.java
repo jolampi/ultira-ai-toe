@@ -33,4 +33,8 @@ public class List<E> {
         return list.get(index);
     }
     
+    public E[] toArray(E[] array) {
+        return list.toArray(array);
+    }
+    
 }

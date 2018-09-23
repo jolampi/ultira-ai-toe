@@ -26,9 +26,8 @@ public class ScannerPlayer implements Player {
     }
 
     @Override
-    public void win() { System.out.println("You win!"); }
-
-    @Override
-    public void lose() { System.out.println("You lose."); }
+    public void end(Mark winner) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
