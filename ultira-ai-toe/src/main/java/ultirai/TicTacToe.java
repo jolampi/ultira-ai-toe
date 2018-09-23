@@ -36,6 +36,11 @@ public class TicTacToe {
         return true;
     }
     
+    public Mark get(int index) {
+        index--;
+        return get(index%SIZE, index/SIZE);
+    }
+    
     public Mark get(int x, int y) {
         return board[y][x];
     }

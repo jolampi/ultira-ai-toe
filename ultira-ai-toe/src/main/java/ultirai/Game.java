@@ -24,7 +24,6 @@ public class Game {
     public void play() {
         boolean turn = true;
         do {
-            boolean boardChosen = game.isBoardChosen();
             Player player = (turn) ? player1 : player2;
             int move = player.move(new GameState(game));
             // Next turn only if a mark was added to the board

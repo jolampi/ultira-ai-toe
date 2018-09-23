@@ -65,11 +65,11 @@ public class AIPlayer implements Player {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < validMoves.size(); i++) {
                 if (validMoves.get(i) == move) {
-                    sb.append('[').append(wins[i]).append('/').append(tries[i]).append(']');
+                    sb.append('[').append(validMoves.get(i)).append(':').append(wins[i]).append('/').append(tries[i]).append(']');
                 } else {
-                    sb.append(wins[i]).append('/').append(tries[i]);
+                    sb.append(validMoves.get(i)).append(':').append(wins[i]).append('/').append(tries[i]);
                 }
-                if (i + 1 < validMoves.size()) { sb.append(' '); }
+                if (i + 1 < validMoves.size()) { sb.append(", "); }
             }
             System.out.println(sb.toString());
         }

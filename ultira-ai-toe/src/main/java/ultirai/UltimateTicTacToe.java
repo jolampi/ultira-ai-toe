@@ -11,14 +11,12 @@ package ultirai;
  */
 public class UltimateTicTacToe extends TicTacToe {
     
-    private int activeX;
-    private int activeY;
+    private int activeBoardIndex;
     private final TicTacToe[][] board;
     
     public UltimateTicTacToe() {
         super();
-        this.activeX = -1;
-        this.activeY = -1;
+        this.activeBoardIndex = 0;
         this.board = new TicTacToe[getSize()][getSize()];
         for (TicTacToe[] row : this.board) {
             for (int i = 0; i < row.length; i++) { row[i] = new TicTacToe(); }
@@ -26,16 +24,15 @@ public class UltimateTicTacToe extends TicTacToe {
     }
     
     public int getActiveBoardIndex() {
-        return activeY * getSize() + activeX + 1;
+        return activeBoardIndex;
     }
     
-    public boolean isBoardChosen() { return activeX >= 0 && activeY >= 0; }
-    
     public boolean isValidMove(int index) {
-        index--;
-        int x = index % getSize();
-        int y = index / getSize();
-        return ((isBoardChosen()) ? board[activeY][activeX].get(x, y) : super.get(x, y)) == Mark.NONE;
+        if (activeBoardIndex > 0) {
+            return getActiveBoard().get(index) == Mark.NONE;
+        } else {
+            return super.get(index) == Mark.NONE;
+        }
     }
     
     @Override
@@ -56,21 +53,21 @@ public class UltimateTicTacToe extends TicTacToe {
     }
     
     @Override
-    public boolean set(int x, int y, Mark mark) {
+    public boolean set(int index, Mark mark) {
         boolean success = false;
-        if (isBoardChosen()) {
-            success = board[activeY][activeX].set(x, y, mark);
+        if (activeBoardIndex > 0) {
+            success = getActiveBoard().set(index, mark);
             if (!success) { return false; }
-            if (board[activeY][activeX].evaluate() == mark) { super.set(activeX, activeY, mark); }
+            if (getActiveBoard().evaluate() == mark) { super.set(activeBoardIndex, mark); }
         }
-        if (super.get(x, y) == Mark.NONE) {
-            activeX = x;
-            activeY = y;
-        } else {
-            activeX = -1;
-            activeY = -1;
-        }
+        activeBoardIndex = (super.get(index) == Mark.NONE) ? index : 0;
         return success;
+    }
+    
+    private TicTacToe getActiveBoard() {
+        int y = (activeBoardIndex - 1) / getSize();
+        int x = (activeBoardIndex - 1) % getSize();
+        return board[y][x];
     }
     
 }

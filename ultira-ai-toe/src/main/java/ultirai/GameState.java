@@ -24,8 +24,8 @@ public class GameState {
         this.board = ultimateTicTacToe.toCharArray();
         this.activeBoardIndex = ultimateTicTacToe.getActiveBoardIndex();
         this.size = ultimateTicTacToe.getSize();
-        this.hashCode = countHash();
         this.validMoves = findValidMoves(ultimateTicTacToe);
+        this.hashCode = countHash();
     }
     
     private List<Integer> findValidMoves(UltimateTicTacToe uttt) {
