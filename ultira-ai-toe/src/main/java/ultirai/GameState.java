@@ -29,11 +29,11 @@ public class GameState {
     }
     
     private List<Integer> findValidMoves(UltimateTicTacToe uttt) {
-        List<Integer> validMoves = new List<Integer>();
+        List<Integer> moves = new List<>();
         for (int i = 1; i <= size*size; i++) {
-            if (uttt.isValidMove(i)) validMoves.add(i);
+            if (uttt.isValidMove(i)) { moves.add(i); }
         }
-        return validMoves;
+        return moves;
     }
 
     private int countHash() {

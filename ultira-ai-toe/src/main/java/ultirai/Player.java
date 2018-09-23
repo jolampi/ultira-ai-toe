@@ -13,4 +13,8 @@ public interface Player {
     
     public int move(GameState gameState);
     
+    public void win();
+    
+    public void lose();
+    
 }

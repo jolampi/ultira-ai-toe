@@ -17,10 +17,12 @@ public class AIPlayer implements Player {
     
     private final Random random;
     private final Dictionary<GameState, Entry> data;
+    private final List<GameState> moveHistory;
 
     public AIPlayer(Random random) {
         this.random = random;
         this.data = new Dictionary();
+        this.moveHistory = new List<>();
     }
 
     @Override
@@ -28,7 +30,17 @@ public class AIPlayer implements Player {
         if (!data.hasKey(gameState)) {
             data.set(gameState, new Entry(gameState));
         }
+        moveHistory.add(gameState);
         return data.get(gameState).randomMove();
+    }
+
+    @Override
+    public void win() {
+    }
+
+    @Override
+    public void lose() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     private class Entry {
@@ -44,7 +56,22 @@ public class AIPlayer implements Player {
         }
         
         public int randomMove() {
-            return validMoves.get(random.nextInt(validMoves.size()));
+            int move = validMoves.get(random.nextInt(validMoves.size()));
+            debugPrint(move);
+            return move;
+        }
+        
+        private void debugPrint(int move) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < validMoves.size(); i++) {
+                if (validMoves.get(i) == move) {
+                    sb.append('[').append(wins[i]).append('/').append(tries[i]).append(']');
+                } else {
+                    sb.append(wins[i]).append('/').append(tries[i]);
+                }
+                if (i + 1 < validMoves.size()) { sb.append(' '); }
+            }
+            System.out.println(sb.toString());
         }
     }
     

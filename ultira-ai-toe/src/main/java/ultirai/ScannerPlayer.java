@@ -24,5 +24,11 @@ public class ScannerPlayer implements Player {
         System.out.println(gameState.toString());
         return scanner.nextInt();
     }
+
+    @Override
+    public void win() { System.out.println("You win!"); }
+
+    @Override
+    public void lose() { System.out.println("You lose."); }
     
 }
