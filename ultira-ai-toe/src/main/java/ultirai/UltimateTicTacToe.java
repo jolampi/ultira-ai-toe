@@ -12,14 +12,14 @@ package ultirai;
 public class UltimateTicTacToe extends TicTacToe {
     
     private int activeBoardIndex;
-    private final TicTacToe[][] board;
+    private final TicTacToe[] board;
     
     public UltimateTicTacToe() {
         super();
         this.activeBoardIndex = 0;
-        this.board = new TicTacToe[getSize()][getSize()];
-        for (TicTacToe[] row : this.board) {
-            for (int i = 0; i < row.length; i++) { row[i] = new TicTacToe(); }
+        this.board = new TicTacToe[getSize()*getSize()];
+        for (int i = 0; i < board.length; i++) {
+            board[i] = new TicTacToe();
         }
     }
     
@@ -38,16 +38,18 @@ public class UltimateTicTacToe extends TicTacToe {
     @Override
     public char[][] toCharArray(char cross, char nought, char none) {
         int size = getSize();
-        char[][] array = new char[size*size][size*size];
-        for (int y = 0; y < size; y++) {
-            int offsetY = y * size;
-            for (int x = 0; x < size; x++) {
-                int offsetX = x * size;
-                char[][] subArray = board[y][x].toCharArray(cross, nought, none);
-                for (int z = 0; z < subArray.length; z++) {
-                    System.arraycopy(subArray[z], 0, array[offsetY+z], offsetX, size);
-                }
+        int sizeSquare = size * size;
+        char[][] array = new char[sizeSquare][sizeSquare];
+        int offsetX = 0;
+        int offsetY = 0;
+        for (TicTacToe ttt : board) {
+            int y = 0;
+            for (char[] subRow : ttt.toCharArray()) {
+                System.arraycopy(subRow, 0, array[size*offsetY+y], size*offsetX, size);
+                y++;
             }
+            offsetX = (offsetX + 1) % size;
+            if (offsetX == 0) { offsetY++; }
         }
         return array;
     }
@@ -65,9 +67,7 @@ public class UltimateTicTacToe extends TicTacToe {
     }
     
     private TicTacToe getActiveBoard() {
-        int y = (activeBoardIndex - 1) / getSize();
-        int x = (activeBoardIndex - 1) % getSize();
-        return board[y][x];
+        return board[activeBoardIndex-1];
     }
     
 }
