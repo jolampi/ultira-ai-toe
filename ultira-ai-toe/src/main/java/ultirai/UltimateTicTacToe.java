@@ -12,14 +12,14 @@ package ultirai;
 public class UltimateTicTacToe extends TicTacToe {
     
     private int activeBoardIndex;
-    private final TicTacToe[] board;
+    private final TicTacToe[] boards;
     
     public UltimateTicTacToe() {
         super();
         this.activeBoardIndex = 0;
-        this.board = new TicTacToe[getSize()*getSize()];
-        for (int i = 0; i < board.length; i++) {
-            board[i] = new TicTacToe();
+        this.boards = new TicTacToe[getSize()*getSize()];
+        for (int i = 0; i < boards.length; i++) {
+            boards[i] = new TicTacToe();
         }
     }
     
@@ -40,16 +40,13 @@ public class UltimateTicTacToe extends TicTacToe {
         int size = getSize();
         int sizeSquare = size * size;
         char[][] array = new char[sizeSquare][sizeSquare];
-        int offsetX = 0;
-        int offsetY = 0;
-        for (TicTacToe ttt : board) {
-            int y = 0;
-            for (char[] subRow : ttt.toCharArray()) {
-                System.arraycopy(subRow, 0, array[size*offsetY+y], size*offsetX, size);
-                y++;
+        for (int i = 0; i < boards.length; i++) {
+            int offsetX = (i % size) * size;
+            int offsetY = (i / size) * size;
+            char[][] subArray = boards[i].toCharArray();
+            for (int y = 0; y < subArray.length; y++) {
+                System.arraycopy(subArray[y], 0, array[offsetY+y], offsetX, size);
             }
-            offsetX = (offsetX + 1) % size;
-            if (offsetX == 0) { offsetY++; }
         }
         return array;
     }
@@ -67,7 +64,7 @@ public class UltimateTicTacToe extends TicTacToe {
     }
     
     private TicTacToe getActiveBoard() {
-        return board[activeBoardIndex-1];
+        return boards[activeBoardIndex-1];
     }
     
 }
