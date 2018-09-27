@@ -28,8 +28,15 @@ public class Game {
             GameState gs = new GameState(game, mark);
             if (!gs.isValidMoves()) { break; }
             int move = (turn) ? player1.move(gs) : player2.move(gs);
-            // Next turn only if a mark was added to the board
-            turn = (game.set(move, (turn) ? Mark.CROSS : Mark.NOUGHT)) ? !turn : turn;
+            if (game.getActiveBoardIndex() == 0) {
+                game.setActiveBoard(move);
+            } else {
+                boolean success = game.set(move, mark);
+                if (success) {
+                    game.setActiveBoard((game.get(move) == Mark.NONE) ? move : 0);
+                    turn = !turn;
+                }
+            }
         } while (game.evaluate() == Mark.NONE);
     }
     
