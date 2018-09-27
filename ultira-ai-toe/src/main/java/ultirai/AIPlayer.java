@@ -16,69 +16,96 @@ import structure.List;
 public class AIPlayer implements Player {
     
     private final Random random;
-    private final Dictionary<GameState, Entry> data;
-    private final List<Move> moveHistory;
+    private final Dictionary<GameState, GameStateData> data;
+    private final List<Turn> moveHistory;
+    private boolean training;
 
     public AIPlayer(Random random) {
         this.random = random;
         this.data = new Dictionary<>();
         this.moveHistory = new List<>();
+        this.training = false;
+    }
+    
+    public void setTraining(boolean training) {
+        this.training = training;
     }
 
     @Override
     public int move(GameState gameState) {
         if (!data.hasKey(gameState)) {
-            data.set(gameState, new Entry(gameState));
+            data.set(gameState, new GameStateData(gameState));
         }
         int move = data.get(gameState).randomMove();
-        moveHistory.add(new Move(gameState, move));
+        moveHistory.add(new Turn(gameState, move));
         return move;
     }
 
     @Override
     public void end(Mark winner) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    private class Move {
-        private final GameState gameState;
-        private final int move;
-
-        public Move(GameState gameState, int move) {
-            this.gameState = gameState;
-            this.move = move;
+        for (int i = 0; i < moveHistory.size(); i++) {
+            Turn turn = moveHistory.get(i);
+            data.get(turn.gameState).update(turn.move, turn.gameState.getTurn() == winner);
         }
+        moveHistory.clear();
     }
-    
-    private class Entry {
         
-        private final Integer[] validMoves;
-        private final int[] wins;
-        private final int[] tries;
         
-        public Entry(GameState gameState) {
-            this.validMoves = gameState.getValidMoves();
-            this.wins = new int[validMoves.length];
-            this.tries = new int[validMoves.length];
+        
+    private class GameStateData {
+        private final Dictionary<Integer, Entry> moves;
+        
+        public GameStateData(GameState gameState) {
+            this.moves = new Dictionary<>();
+            for (int i : gameState.getValidMoves()) {
+                moves.set(i, new Entry());
+            }
         }
         
         public int randomMove() {
-            int move = validMoves[random.nextInt(validMoves.length)];
-            debugPrint(move);
+            List<Integer> list = moves.keys();
+            int move = list.get(random.nextInt(list.size()));
+            if (!training) { debugPrint(list, move); }
             return move;
         }
         
-        private void debugPrint(int move) {
+        public void update(int move, boolean win) {
+            Entry entry = moves.get(move);
+            if (win) { entry.wins++; }
+            entry.tries++;
+        }
+        
+        private void debugPrint(List<Integer> keys, int move) {
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < validMoves.length; i++) {
-                if (validMoves[i] == move) {
-                    sb.append('[').append(validMoves[i]).append(':').append(wins[i]).append('/').append(tries[i]).append(']');
-                } else {
-                    sb.append(validMoves[i]).append(':').append(wins[i]).append('/').append(tries[i]);
-                }
-                if (i + 1 < validMoves[i]) { sb.append(", "); }
+            for (int i = 0; i < keys.size(); i++) {
+                int key = keys.get(i);
+                if (key == move) { sb.append('['); }
+                sb.append(key).append(':').append(moves.get(key).wins).append('/').append(moves.get(key).tries);
+                if (key == move) { sb.append(']'); }
+                if (i + 1 < keys.size()) { sb.append(", "); }
             }
             System.out.println(sb.toString());
+        }
+        
+    }
+    
+    private class Entry {
+        public int wins;
+        public int tries;
+        
+        public Entry() {
+            this.wins = 0;
+            this.tries = 0;
+        }
+    }
+    
+    private class Turn {
+        public GameState gameState;
+        public int move;
+
+        public Turn(GameState gameState, int move) {
+            this.gameState = gameState;
+            this.move = move;
         }
     }
     

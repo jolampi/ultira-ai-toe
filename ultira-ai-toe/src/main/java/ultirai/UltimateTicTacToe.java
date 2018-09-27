@@ -44,7 +44,7 @@ public class UltimateTicTacToe extends TicTacToe {
     @Override
     public char[][] toCharArray(char cross, char nought, char none) {
         int size = getSize();
-        int sizeSquare = size * size;
+        int sizeSquare = getSizeSquare();
         char[][] array = new char[sizeSquare][sizeSquare];
         for (int i = 0; i < boards.length; i++) {
             int offsetX = (i % size) * size;
@@ -66,6 +66,14 @@ public class UltimateTicTacToe extends TicTacToe {
         }
         return success;
         
+    }
+    
+    @Override
+    public void clearBoard() {
+        super.clearBoard();
+        for (TicTacToe board : boards) {
+            board.clearBoard();
+        }
     }
     
     private int getSizeSquare() {

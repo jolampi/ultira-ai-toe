@@ -22,6 +22,7 @@ public class Game {
     }
     
     public void play() {
+        Mark winner = Mark.NONE;
         boolean turn = true;
         do {
             Mark mark = (turn) ? Mark.CROSS : Mark.NOUGHT;
@@ -37,7 +38,10 @@ public class Game {
                     turn = !turn;
                 }
             }
-        } while (game.evaluate() == Mark.NONE);
+        } while ((winner = game.evaluate()) == Mark.NONE);
+        player1.end(winner);
+        player2.end(winner);
+        game.clearBoard();
     }
     
 }

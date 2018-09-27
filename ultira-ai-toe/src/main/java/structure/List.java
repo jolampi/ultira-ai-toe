@@ -37,4 +37,8 @@ public class List<E> {
         return list.toArray(array);
     }
     
+    public void clear() {
+        list.clear();
+    }
+    
 }

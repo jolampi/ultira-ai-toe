@@ -21,6 +21,14 @@ public class Dictionary<K,E> {
         this.dictionary = new HashMap<>();
     }
     
+    public List<K> keys() {
+        List<K> keys = new List<>();
+        dictionary.keySet().forEach((key) -> {
+            keys.add(key);
+        });
+        return keys;
+    }
+    
     public void set(K key, E value) {
         dictionary.put(key, value);
     }
