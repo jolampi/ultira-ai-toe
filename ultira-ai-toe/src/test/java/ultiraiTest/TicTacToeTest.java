@@ -40,42 +40,46 @@ public class TicTacToeTest {
     }
     
     @Test
-    public void WinningEvaluationWorks() {
+    public void WinningEvaluationDefault() {
         TicTacToe ttt = new TicTacToe();
         int size = ttt.getSize();
         Assert.assertEquals("Start of game", Mark.NONE, ttt.evaluate());
-        for (int r = 0; r < size; r++) {
-            for (int i = 0; i < size; i++) {
-                ttt.set(i, r, Mark.CROSS);
+        
+        // Test rows
+        for (int y = 1; y <= size; y++) {
+            for (int x = 1; x <= size; x++) {
+                ttt.set(toIndex(x, y, size), Mark.CROSS);
             }
-            Assert.assertEquals("Horizontal row " + r + " winner", Mark.CROSS, ttt.evaluate());
-            ttt.clearBoard();
-            for (int i = 0; i < size; i++) {
-                ttt.set(r, i, Mark.NOUGHT);
-            }
-            Assert.assertEquals("Vertical row " + r + " winner", Mark.NOUGHT, ttt.evaluate());
+            Assert.assertEquals("Row " + y + "winner", Mark.CROSS, ttt.evaluate());
             ttt.clearBoard();
         }
-        ttt.clearBoard();
-        for (int i = 0; i < size; i++) {
-            ttt.set(i, i, Mark.CROSS);
+        
+        // Test columns
+        for (int x = 1; x <= size; x++) {
+            for (int y = 1; y <= size; y++) {
+                ttt.set(toIndex(x, y, size), Mark.NOUGHT);
+            }
+            Assert.assertEquals("Vertical column" + x + " winner", Mark.NOUGHT, ttt.evaluate());
+            ttt.clearBoard();
+        }
+        
+        // Test diagonal
+        
+        for (int i = 1; i <= size; i++) {
+            ttt.set(toIndex(i, i, size), Mark.CROSS);
         }
         Assert.assertEquals("Diagonal row \\ winner", Mark.CROSS, ttt.evaluate());
         ttt.clearBoard();
-        for (int i = 0; i < size; i++) {
-            ttt.set(size-1-i, i, Mark.NOUGHT);
+        
+        for (int i = 1; i <= size; i++) {
+            ttt.set(toIndex(i, size+1-i, size), Mark.NOUGHT);
         }
         Assert.assertEquals("Diagonal row / winner", Mark.NOUGHT, ttt.evaluate());
+        ttt.clearBoard();
     }
     
-    @Test
-    public void CharacterArrayTest() {
-        TicTacToe ttt = new TicTacToe();
-        ttt.set(0, 0, Mark.CROSS);
-        Assert.assertArrayEquals(new char[][] {{'x','.','.'},{'.','.','.'},{'.','.','.'}}, ttt.toCharArray('x', 'o', '.'));
-        ttt.set(1, 0, Mark.CROSS);
-        ttt.set(2, 2, Mark.NOUGHT);
-        Assert.assertArrayEquals(new char[][] {{'x','x',' '},{' ',' ',' '},{' ',' ','o'}}, ttt.toCharArray('x', 'o', ' '));
+    private int toIndex(int x, int y, int size) {
+            return (y-1) * size + x;
     }
     
 }

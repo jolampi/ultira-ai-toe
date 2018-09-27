@@ -27,22 +27,18 @@ public class TicTacToe {
     
     public boolean set(int n, Mark mark) {
         n--;
-        return set(n%getSize(), n/getSize(), mark);
-    }
-    
-    public boolean set(int x, int y, Mark mark) {
-        if (board[y][x] != Mark.NONE) { return false; }
-        board[y][x] = mark;
-        return true;
+        int x = n % SIZE;
+        int y = n / SIZE;
+        if (board[y][x] == Mark.NONE) {
+            board[y][x] = mark;
+            return true;
+        }
+        return false;
     }
     
     public Mark get(int index) {
         index--;
-        return get(index%SIZE, index/SIZE);
-    }
-    
-    public Mark get(int x, int y) {
-        return board[y][x];
+        return board[index / SIZE][index % SIZE];
     }
     
     public Mark evaluate() {
