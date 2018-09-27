@@ -27,7 +27,7 @@ public class ScannerPlayer implements Player {
 
     @Override
     public void end(Mark winner) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println();
     }
     
 }

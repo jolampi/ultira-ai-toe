@@ -40,7 +40,6 @@ public class UltimateTicTacToe extends TicTacToe {
         }
     }
     
-    
     @Override
     public char[][] toCharArray(char cross, char nought, char none) {
         int size = getSize();
@@ -49,12 +48,36 @@ public class UltimateTicTacToe extends TicTacToe {
         for (int i = 0; i < boards.length; i++) {
             int offsetX = (i % size) * size;
             int offsetY = (i / size) * size;
-            char[][] subArray = boards[i].toCharArray();
-            for (int y = 0; y < subArray.length; y++) {
-                System.arraycopy(subArray[y], 0, array[offsetY+y], offsetX, size);
+            switch (get(i+1)) {
+                case CROSS: renderCross(cross, none, array, offsetX, offsetY); break;
+                case NOUGHT: renderNought(nought, none, array, offsetX, offsetY); break;
+                default:
+                    char[][] subArray = boards[i].toCharArray();
+                    for (int y = 0; y < subArray.length; y++) {
+                        System.arraycopy(subArray[y], 0, array[offsetY+y], offsetX, size);
+                    }
             }
         }
+//        renderCross(cross, none, array, 3, 6);
         return array;
+    }
+
+    private void renderCross(char cross, char none, char[][] array, int startX, int startY) {
+        int size = getSize();
+        for (int y = 0; y < size; y++) {
+            for (int x = 0; x < size; x++) {
+                array[startY+y][startX+x] = (y == x || y+x+1 == getSize()) ? cross : none;
+            }
+        }
+    }
+    
+    private void renderNought(char nought, char none, char[][] array, int startX, int startY) {
+        int size = getSize();
+        for (int y = 0; y < size; y++) {
+            for (int x = 0; x < size; x++) {
+                array[startY+y][startX+x] = (x == 0 || x == size-1 || y == 0 || y == size-1) ? nought : none;
+            }
+        }
     }
     
     @Override
@@ -62,7 +85,7 @@ public class UltimateTicTacToe extends TicTacToe {
         boolean success = false;
         if (activeBoardIndex > 0) {
             success = getActiveBoard().set(index, mark);
-            if (success && getActiveBoard().evaluate() == mark) { super.set(index, mark); }
+            if (success && getActiveBoard().evaluate() == mark) { super.set(activeBoardIndex, mark); }
         }
         return success;
         

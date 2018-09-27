@@ -24,7 +24,7 @@ public class Main {
         AIPlayer ai = new AIPlayer(new Random());
         ai.setTraining(true);
         Game game = new Game(ai, ai);
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 10000; i++) {
             game.play();
         }
         ai.setTraining(false);
