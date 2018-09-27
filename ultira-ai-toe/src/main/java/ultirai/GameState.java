@@ -49,6 +49,10 @@ public class GameState {
         return turn;
     }
     
+    public boolean isValidMoves() {
+        return validMoves.length > 0;
+    }
+    
     public Integer[] getValidMoves() {
         return Arrays.copyOf(validMoves, validMoves.length);
     }

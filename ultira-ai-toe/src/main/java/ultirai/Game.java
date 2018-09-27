@@ -24,9 +24,10 @@ public class Game {
     public void play() {
         boolean turn = true;
         do {
-            Player player = (turn) ? player1 : player2;
             Mark mark = (turn) ? Mark.CROSS : Mark.NOUGHT;
-            int move = player.move(new GameState(game, mark));
+            GameState gs = new GameState(game, mark);
+            if (!gs.isValidMoves()) { break; }
+            int move = (turn) ? player1.move(gs) : player2.move(gs);
             // Next turn only if a mark was added to the board
             turn = (game.set(move, (turn) ? Mark.CROSS : Mark.NOUGHT)) ? !turn : turn;
         } while (game.evaluate() == Mark.NONE);
