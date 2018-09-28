@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import ultirai.Mark;
-import ultirai.TicTacToe;
+import ultirai.Board;
 
 /**
  *
@@ -41,7 +41,7 @@ public class TicTacToeTest {
     
     @Test
     public void WinningEvaluationDefault() {
-        TicTacToe ttt = new TicTacToe();
+        Board ttt = new Board();
         int size = ttt.getSize();
         Assert.assertEquals("Start of game", Mark.NONE, ttt.evaluate());
         

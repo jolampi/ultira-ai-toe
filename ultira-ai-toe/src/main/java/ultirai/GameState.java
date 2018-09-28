@@ -21,7 +21,7 @@ public class GameState {
     private final Integer[] validMoves;
     private final int hashCode;
     
-    public GameState(UltimateTicTacToe ultimateTicTacToe, Mark turn) {
+    public GameState(SuperBoard ultimateTicTacToe, Mark turn) {
         this.board = ultimateTicTacToe.toCharArray();
         this.activeBoardIndex = ultimateTicTacToe.getActiveBoardIndex();
         this.turn = turn;
@@ -29,7 +29,7 @@ public class GameState {
         this.hashCode = countHash();
     }
     
-    private Integer[] findValidMoves(UltimateTicTacToe uttt) {
+    private Integer[] findValidMoves(SuperBoard uttt) {
         List<Integer> moves = new List<>();
         for (int i = 1; i <= board.length; i++) {
             if (uttt.isValidMove(i)) { moves.add(i); }

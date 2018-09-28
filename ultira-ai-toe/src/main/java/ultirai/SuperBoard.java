@@ -9,17 +9,17 @@ package ultirai;
  *
  * @author Jori Lampi
  */
-public class UltimateTicTacToe extends TicTacToe {
+public class SuperBoard extends Board {
     
     private int activeBoardIndex;
-    private final TicTacToe[] boards;
+    private final Board[] boards;
     
-    public UltimateTicTacToe() {
+    public SuperBoard() {
         super();
         this.activeBoardIndex = 0;
-        this.boards = new TicTacToe[getSizeSquare()];
+        this.boards = new Board[getSizeSquare()];
         for (int i = 0; i < boards.length; i++) {
-            boards[i] = new TicTacToe();
+            boards[i] = new Board();
         }
     }
     
@@ -94,7 +94,7 @@ public class UltimateTicTacToe extends TicTacToe {
     @Override
     public void clearBoard() {
         super.clearBoard();
-        for (TicTacToe board : boards) {
+        for (Board board : boards) {
             board.clearBoard();
         }
     }
@@ -103,7 +103,7 @@ public class UltimateTicTacToe extends TicTacToe {
         return getSize() * getSize();
     }
     
-    private TicTacToe getActiveBoard() {
+    private Board getActiveBoard() {
         return boards[activeBoardIndex-1];
     }
     

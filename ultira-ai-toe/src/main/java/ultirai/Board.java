@@ -9,14 +9,14 @@ package ultirai;
  *
  * @author Jori Lampi
  */
-public class TicTacToe {
+public class Board {
     
     private final static int SIZE = 3;
     private final static int WIN_REQUIREMENT = 3;
     
     private final Mark[][] board;
 
-    public TicTacToe() {
+    public Board() {
         this.board = new Mark[SIZE][SIZE];
         clear();
     }
