@@ -23,3 +23,10 @@ I'm starting to get the final picture of how the code should be structured. This
 After these two milestones I will shift the focus to implementing the data structures that currently work as wrappers. Working around Java's annoying lack of Generic arrays is not something I'm looking forward to. Creating Javadocs will also be finally sensible as I'm starting to finally settle with my methods.
 
 Time spent this week: 14 hours.
+
+
+# Week 4
+
+I have sorted out a lot of responsibilities in the code. This has caused some parts to essentially become obsolete. Fixing those will improve the performance and the code in general but it will take some careful consideration when doing so. These changes should eventually lead to more possibilities overall. For example the alpha beta pruning idea was turning out to be impossible because I had separated some functions too wide. However I'm keeping that one as a possible bonus feature for now, as I've yet to even implement the data structures myself.
+
+Time spent this week: 10 hours.
