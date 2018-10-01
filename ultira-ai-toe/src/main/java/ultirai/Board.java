@@ -5,69 +5,58 @@
  */
 package ultirai;
 
+import java.util.Arrays;
+
 /**
  *
  * @author Jori Lampi
  */
-public class Board {
-    
-    private final static int SIZE = 3;
-    private final static int WIN_REQUIREMENT = 3;
+final public class Board {
     
     private final Mark[][] board;
-
-    public Board() {
-        this.board = new Mark[SIZE][SIZE];
-        clear();
+    
+    public Board(int size) {
+        if (size <= 0) { throw new IllegalArgumentException("Board size must be positive."); }
+        this.board = new Mark[size][];
+        Mark[] row = new Mark[size];
+        Arrays.fill(row, Mark.NONE);
+        Arrays.fill(board, row);
     }
     
+    private Board(Board previous, Mark mark, int x, int y) {
+        this.board = previous.board.clone();
+        this.board[y] = previous.board[y].clone();
+        this.board[y][x] = mark;
+    }
+        
     public int getSize() {
-        return SIZE;
+        return board.length;
     }
     
-    public boolean set(int n, Mark mark) {
-        n--;
-        int x = n % SIZE;
-        int y = n / SIZE;
-        if (board[y][x] == Mark.NONE) {
-            board[y][x] = mark;
-            return true;
-        }
-        return false;
+    public Mark getMarkAt(int x, int y) {
+        return board[y][x];
     }
     
-    public Mark get(int index) {
-        index--;
-        return board[index / SIZE][index % SIZE];
-    }
-    
-    public Mark evaluate() {
+    public Mark resolve() {
+        int size = getSize();
         Mark mark;
-        for (int i = 0; i < SIZE; i++) {
-            if ((mark = evaluateRow(0, i, 1, 0)) != Mark.NONE) { return mark; }
-            if ((mark = evaluateRow(i, 0, 0, 1)) != Mark.NONE) { return mark; }
+        for (int i = 0; i < size; i++) {
+            if ((mark = resolveRow(0, i, 1, 0)) != Mark.NONE) { return mark; }
+            if ((mark = resolveRow(i, 0, 0, 1)) != Mark.NONE) { return mark; }
         }
         // diagonal rows
-        if ((mark = evaluateRow(0, 0, 1, 1)) != Mark.NONE) { return mark; }
-        if ((mark = evaluateRow(SIZE-1, 0, -1, 1)) != Mark.NONE) { return mark; }
-        
+        if ((mark = resolveRow(0, 0, 1, 1)) != Mark.NONE) { return mark; }
+        if ((mark = resolveRow(size-1, 0, -1, 1)) != Mark.NONE) { return mark; }
         return Mark.NONE;
-        
-        /* required block if the WIN_REQUIREMENT is less than a board's dimension. Untested ATM
-        for (int i = 1; i <= SIZE - WIN_REQUIREMENT; i++) {
-            if ((mark = evaluateRow(i, 0, 1, 1)) != Mark.NONE) { return mark; }
-            if ((mark = evaluateRow(0, i, 1, 1)) != Mark.NONE) { return mark; }
-            if ((mark = evaluateRow(SIZE-1, i, -1, 1)) != Mark.NONE) { return mark; }
-            if ((mark = evaluateRow(SIZE-1-i, 0, -1, 1)) != Mark.NONE) { return mark; }
-        }*/
     }
     
-    private Mark evaluateRow(int x, int y, int dx, int dy) {
+    private Mark resolveRow(int x, int y, int dx, int dy) {
+        int size = getSize();
         Mark mark = Mark.NONE;
         int count = 0;
-        while (0 <= y && y < SIZE && 0 <= x && x < SIZE) {
+        while (0 <= y && y < size && 0 <= x && x < size) {
             if (mark == board[y][x]) {
-                if (++count == WIN_REQUIREMENT) { return mark; }
+                if (++count == size) { return mark; }
             } else {
                 mark = board[y][x];
                 count = 1;
@@ -76,30 +65,17 @@ public class Board {
             y += dy;
         }
         return Mark.NONE;
-    }
+}
     
-    public void clearBoard() {
-        // This same logic is required in the constructor which needs to be
-        // unoverridable. A private method is used here for that reason.
-        clear();
-    }
-    
-    private void clear() {
-        for (Mark[] row : board) {
-            for (int x = 0; x < row.length; x++) {
-                row[x] = Mark.NONE;
-            }
-        }
-    }
-    
-    public char[][] toCharArray() {
-        return toCharArray('X', 'O', ' ');
+    public Board next(Mark mark, int x, int y) {
+        return new Board(this, mark, x, y);
     }
     
     public char[][] toCharArray(char cross, char nought, char none) {
-        char[][] array = new char[SIZE][SIZE];
-        for (int y = 0; y < SIZE; y++) {
-            for (int x = 0; x < SIZE; x++) {
+        int size = board.length;
+        char[][] array = new char[size][size];
+        for (int y = 0; y < size; y++) {
+            for (int x = 0; x < size; x++) {
                 switch (board[y][x]) {
                     case CROSS: array[y][x] = cross; break;
                     case NOUGHT: array[y][x] = nought; break;
@@ -111,14 +87,28 @@ public class Board {
     }
     
     @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder(SIZE * (SIZE + 1));
-        int rowCount = 0;
-        for (char[] row : toCharArray()) {
-            sb.append(row);
-            if (rowCount++ < SIZE) { sb.append('\n'); }
+    public int hashCode() {
+        int hash = 7;
+        hash = 67 * hash + Arrays.deepHashCode(this.board);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
         }
-        return sb.toString();
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Board other = (Board) obj;
+        if (!Arrays.deepEquals(this.board, other.board)) {
+            return false;
+        }
+        return true;
     }
     
 }

@@ -5,106 +5,115 @@
  */
 package ultirai;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 /**
  *
  * @author Jori Lampi
  */
-public class SuperBoard extends Board {
+final public class SuperBoard {
     
-    private int activeBoardIndex;
-    private final Board[] boards;
+    private final Board board;
+    private final Board[][] subBoards;
     
-    public SuperBoard() {
-        super();
-        this.activeBoardIndex = 0;
-        this.boards = new Board[getSizeSquare()];
-        for (int i = 0; i < boards.length; i++) {
-            boards[i] = new Board();
-        }
+    public SuperBoard(int size) {
+        this.board = new Board(size);
+        this.subBoards = new Board[size][];
+        Board[] row = new Board[size];
+        Arrays.fill(row, this.board);
+        Arrays.fill(this.subBoards, row);
     }
     
-    public int getActiveBoardIndex() {
-        return activeBoardIndex;
+    private SuperBoard(Board board, Board[][] subBoards) {
+        this.board = board;
+        this.subBoards = subBoards;
     }
     
-    public void setActiveBoard(int index) {
-        if (index < 0 || index > getSizeSquare()) { throw new IllegalArgumentException("Active board index out of bounds."); }
-        activeBoardIndex = index;
+    public Board getBoard() {
+        return board;
     }
     
-    public boolean isValidMove(int index) {
-        if (activeBoardIndex > 0) {
-            return getActiveBoard().get(index) == Mark.NONE;
-        } else {
-            return super.get(index) == Mark.NONE;
-        }
+    public Board getSubBoardAt(int x, int y) {
+        return subBoards[y][x];
     }
     
-    @Override
+    public int getSize() {
+        return board.getSize();
+    }
+    
+    public Mark resolve() {
+        return board.resolve();
+    }
+    
+    public SuperBoard next(Mark mark, int boardX, int boardY, int x, int y) {
+        Board changed = subBoards[boardY][boardX].next(mark, x, y);
+        Board[][] nextBoards = subBoards.clone();
+        nextBoards[boardY] = subBoards[boardY].clone();
+        nextBoards[boardY][boardX] = changed;
+        Mark result = changed.resolve();
+        Board nextBoard = (result == Mark.NONE) ? board : board.next(result, boardX, boardY);
+        return new SuperBoard(nextBoard, nextBoards);
+    }
+    
     public char[][] toCharArray(char cross, char nought, char none) {
         int size = getSize();
-        int sizeSquare = getSizeSquare();
+        int sizeSquare = size * size;
         char[][] array = new char[sizeSquare][sizeSquare];
-        for (int i = 0; i < boards.length; i++) {
-            int offsetX = (i % size) * size;
-            int offsetY = (i / size) * size;
-            switch (get(i+1)) {
-                case CROSS: renderCross(cross, none, array, offsetX, offsetY); break;
-                case NOUGHT: renderNought(nought, none, array, offsetX, offsetY); break;
-                default:
-                    char[][] subArray = boards[i].toCharArray();
-                    for (int y = 0; y < subArray.length; y++) {
-                        System.arraycopy(subArray[y], 0, array[offsetY+y], offsetX, size);
-                    }
+        for (int y = 0; y < size; y++) {
+            int offsetY = y * size;
+            for (int x = 0; x < size; x++) {
+                int offsetX = x * size;
+                switch (board.getMarkAt(x, y)) {
+                    default:
+                        char[][] subArray = subBoards[y][x].toCharArray(cross, nought, none);
+                        for (int i = 0; i < subArray.length; i++) {
+                            System.arraycopy(subArray[i], 0, array[offsetY+i], offsetX, size);
+                        }
+                }
             }
         }
-//        renderCross(cross, none, array, 3, 6);
         return array;
     }
 
-    private void renderCross(char cross, char none, char[][] array, int startX, int startY) {
+    @Override
+    public int hashCode() {
+        int size = getSize();
+        int hash = 7;
+        for (int y = 0; y < size; y++) {
+            for (int x = 0; x < size; x++) {
+                Mark mark = board.getMarkAt(x, y);
+                hash = 97 * hash + ((mark != Mark.NONE) ? Objects.hashCode(mark) : subBoards[y][x].hashCode());
+            }
+        }
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        final SuperBoard other = (SuperBoard) obj;
         int size = getSize();
         for (int y = 0; y < size; y++) {
             for (int x = 0; x < size; x++) {
-                array[startY+y][startX+x] = (y == x || y+x+1 == getSize()) ? cross : none;
+                Mark mark = this.board.getMarkAt(x, y);
+                if (mark != Mark.NONE) {
+                    if (mark != other.board.getMarkAt(x, y)) {
+                        return false;
+                    }
+                } else {
+                    if (!this.subBoards[y][x].equals(other.subBoards[y][x])) {
+                        return false;
+                    }
+                }
             }
         }
-    }
-    
-    private void renderNought(char nought, char none, char[][] array, int startX, int startY) {
-        int size = getSize();
-        for (int y = 0; y < size; y++) {
-            for (int x = 0; x < size; x++) {
-                array[startY+y][startX+x] = (x == 0 || x == size-1 || y == 0 || y == size-1) ? nought : none;
-            }
-        }
-    }
-    
-    @Override
-    public boolean set(int index, Mark mark) {
-        boolean success = false;
-        if (activeBoardIndex > 0) {
-            success = getActiveBoard().set(index, mark);
-            if (success && getActiveBoard().evaluate() == mark) { super.set(activeBoardIndex, mark); }
-        }
-        return success;
-        
-    }
-    
-    @Override
-    public void clearBoard() {
-        super.clearBoard();
-        for (Board board : boards) {
-            board.clearBoard();
-        }
-    }
-    
-    private int getSizeSquare() {
-        return getSize() * getSize();
-    }
-    
-    private Board getActiveBoard() {
-        return boards[activeBoardIndex-1];
+        return true;
     }
     
 }

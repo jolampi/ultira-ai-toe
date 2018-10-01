@@ -5,6 +5,7 @@
  */
 package ultirai;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -22,12 +23,12 @@ public class ScannerPlayer implements Player {
     @Override
     public int move(GameState gameState) {
         System.out.println(gameState.toString());
-        return scanner.nextInt();
+        return scanner.nextInt()-1;
     }
 
     @Override
     public void end(Mark winner) {
-        System.out.println();
+        System.out.println(winner.toString() + " wins.");
     }
     
 }

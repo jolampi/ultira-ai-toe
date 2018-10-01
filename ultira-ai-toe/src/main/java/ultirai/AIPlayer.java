@@ -18,17 +18,17 @@ public class AIPlayer implements Player {
     private final Random random;
     private final Dictionary<GameState, GameStateData> data;
     private final List<Turn> moveHistory;
-    private boolean training;
+    private boolean debug;
 
     public AIPlayer(Random random) {
         this.random = random;
         this.data = new Dictionary<>();
         this.moveHistory = new List<>();
-        this.training = false;
+        this.debug = false;
     }
     
-    public void setTraining(boolean training) {
-        this.training = training;
+    public void setDebug(boolean debug) {
+        this.debug = debug;
     }
 
     @Override
@@ -57,7 +57,8 @@ public class AIPlayer implements Player {
         
         public GameStateData(GameState gameState) {
             this.moves = new Dictionary<>();
-            for (int i : gameState.getValidMoves()) {
+            List<Integer> validMoves = gameState.getValidMoves();
+            for (int i = 0; i < validMoves.size(); i++) {
                 moves.set(i, new Entry());
             }
         }
@@ -65,7 +66,7 @@ public class AIPlayer implements Player {
         public int randomMove() {
             List<Integer> list = moves.keys();
             int move = list.get(random.nextInt(list.size()));
-            if (!training) { debugPrint(list, move); }
+            if (debug) { debugPrint(list, move); }
             return move;
         }
         
@@ -80,7 +81,7 @@ public class AIPlayer implements Player {
             for (int i = 0; i < keys.size(); i++) {
                 int key = keys.get(i);
                 if (key == move) { sb.append('['); }
-                sb.append(key).append(':').append(moves.get(key).wins).append('/').append(moves.get(key).tries);
+                sb.append(key+1).append(':').append(moves.get(key).wins).append('/').append(moves.get(key).tries);
                 if (key == move) { sb.append(']'); }
                 if (i + 1 < keys.size()) { sb.append(", "); }
             }

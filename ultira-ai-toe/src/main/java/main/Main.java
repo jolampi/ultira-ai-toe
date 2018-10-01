@@ -20,15 +20,13 @@ public class Main {
     
     public static void main(String[] args) {
         
-        Player player = new ScannerPlayer(new Scanner(System.in));
+        Player human = new ScannerPlayer(new Scanner(System.in));
         AIPlayer ai = new AIPlayer(new Random());
-        ai.setTraining(true);
-        Game game = new Game(ai, ai);
-        for (int i = 0; i < 10000; i++) {
-            game.play();
-        }
-        ai.setTraining(false);
-        new Game(ai, player).play();
+//        for (int i = 0; i < 10000; i++) {
+//            Game.play(3, ai, ai);
+//        }
+        ai.setDebug(true);
+        Game.play(3, human, human);
     }
     
 }

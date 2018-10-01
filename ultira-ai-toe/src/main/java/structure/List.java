@@ -29,6 +29,10 @@ public class List<E> {
         list.add(e);
     }
     
+    public boolean isEmpty() {
+        return list.isEmpty();
+    }
+    
     public E get(int index) {
         return list.get(index);
     }

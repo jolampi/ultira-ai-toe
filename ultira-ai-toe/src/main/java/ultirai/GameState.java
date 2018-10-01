@@ -5,99 +5,106 @@
  */
 package ultirai;
 
-import java.util.Arrays;
-import java.util.Objects;
 import structure.List;
 
 /**
  *
  * @author Jori Lampi
  */
-public class GameState {
+final public class GameState {
     
-    private final char[][] board;
-    private final int activeBoardIndex;
+    private final SuperBoard board;
+    private final int activeX;
+    private final int activeY;
     private final Mark turn;
-    private final Integer[] validMoves;
-    private final int hashCode;
     
-    public GameState(SuperBoard ultimateTicTacToe, Mark turn) {
-        this.board = ultimateTicTacToe.toCharArray();
-        this.activeBoardIndex = ultimateTicTacToe.getActiveBoardIndex();
+    public GameState(int size) {
+        this(new SuperBoard(size), Mark.CROSS, -1, -1);
+    }
+    
+    private GameState(SuperBoard board, Mark turn, int activeX, int activeY) {
+        this.board = board;
+        this.activeX = activeX;
+        this.activeY = activeY;
         this.turn = turn;
-        this.validMoves = findValidMoves(ultimateTicTacToe);
-        this.hashCode = countHash();
-    }
-    
-    private Integer[] findValidMoves(SuperBoard uttt) {
-        List<Integer> moves = new List<>();
-        for (int i = 1; i <= board.length; i++) {
-            if (uttt.isValidMove(i)) { moves.add(i); }
-        }
-        return moves.toArray(new Integer[moves.size()]);
-    }
-    
-    private int countHash() {
-        int hash = 7;
-        hash = 79 * hash + Arrays.deepHashCode(this.board);
-        hash = 79 * hash + this.activeBoardIndex;
-        hash = 79 * hash + Objects.hashCode(this.turn);
-        return hash;
     }
     
     public Mark getTurn() {
         return turn;
     }
     
-    public boolean isValidMoves() {
-        return validMoves.length > 0;
+    public boolean isBoardActive() {
+        return activeX >= 0;
     }
     
-    public Integer[] getValidMoves() {
-        return Arrays.copyOf(validMoves, validMoves.length);
+    public boolean isValidMove(int move) {
+        int size = board.getSize();
+        return isValidMove(move%size, move/size);
     }
-
-    @Override
-    public int hashCode() {
-        return hashCode;
+    
+    private boolean isValidMove(int x, int y) {
+        return getActiveBoard().getMarkAt(x, y) == Mark.NONE;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
+    
+    public boolean hasValidMoves() {
+        int size = board.getSize();
+        for (int y = 0; y < size; y++) {
+            for (int x = 0; x < size; x++) {
+                if (isValidMove(x, y)) { return true; }
+            }
         }
-        if (obj == null) {
-            return false;
+        return false;
+    }
+    
+    public Board getActiveBoard() {
+        return (isBoardActive()) ? board.getSubBoardAt(activeX, activeY) : board.getBoard();
+    }
+    
+    public List<Integer> getValidMoves() {
+        int size = board.getSize();
+        List<Integer> moves = new List<>();
+        for (int y = 0; y < size; y++) {
+            for (int x = 0; x < size; x++) {
+                if (isValidMove(x, y)) { moves.add(y*size+x); }
+            }
         }
-        if (getClass() != obj.getClass()) {
-            return false;
+        return moves;
+    }
+    
+    public Mark resolve() {
+        return board.resolve();
+    }
+    
+    public GameState next(int move) {
+        int size = board.getSize();
+        if (move < 0 || move >= size * size) { throw new IllegalArgumentException("Move out of bounds."); }
+        int x = move % board.getSize();
+        int y = move / board.getSize();
+        if (!isValidMove(x, y)) { throw new IllegalStateException("Illegal move."); }
+        if (!isBoardActive()) {
+            return new GameState(board, turn, x, y);
         }
-        final GameState other = (GameState) obj;
-        if (this.activeBoardIndex != other.activeBoardIndex) {
-            return false;
+        SuperBoard nextBoard = board.next(turn, activeX, activeY, x, y);
+        Mark nextTurn = (turn == Mark.NOUGHT) ? Mark.CROSS : Mark.NOUGHT;
+        if (nextBoard.getBoard().getMarkAt(x, y) == Mark.NONE) {
+            return new GameState(nextBoard, nextTurn, x, y);
         }
-        if (!Arrays.deepEquals(this.board, other.board)) {
-            return false;
-        }
-        if (this.turn != other.turn) {
-            return false;
-        }
-        return true;
+        return new GameState(nextBoard, nextTurn, -1, -1);
     }
     
     @Override
     public String toString() {
-        int size = (int) Math.sqrt(board.length);
         StringBuilder sb = new StringBuilder();
-        for (int y = 0; y < board.length; y++) {
-            for (int x = 0; x < board[y].length; x++) {
-                sb.append(board[y][x]);
-                if (x < board[y].length - 1 && x % size == 2) { sb.append('|'); }
+        char[][] chars = board.toCharArray('X', 'O', '.');
+        int breakpoint = board.getSize();
+        for (int y = 0; y < chars.length;) {
+            for (int x = 0; x < chars[y].length;) {
+                sb.append(chars[y][x]);
+                if ((++x % breakpoint) == 0) { sb.append(' '); }
             }
-            if (y < board.length - 1) {
+            if (++y < chars.length) {
                 sb.append('\n');
-                if (y % size == 2) { sb.append("---+---+---\n"); }
+                if (y % breakpoint == 0) { sb.append('\n'); }
             }
         }
         return sb.toString();
