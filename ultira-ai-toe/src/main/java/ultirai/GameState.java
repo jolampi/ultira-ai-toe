@@ -5,6 +5,7 @@
  */
 package ultirai;
 
+import java.util.Objects;
 import structure.List;
 
 /**
@@ -90,6 +91,40 @@ final public class GameState {
             return new GameState(nextBoard, nextTurn, x, y);
         }
         return new GameState(nextBoard, nextTurn, -1, -1);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 29 * hash + board.hashCode();
+        hash = 29 * hash + this.activeX;
+        hash = 29 * hash + this.activeY;
+        hash = 29 * hash + turn.hashCode();
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final GameState other = (GameState) obj;
+        if (this.activeX != other.activeX) {
+            return false;
+        }
+        if (this.activeY != other.activeY) {
+            return false;
+        }
+        if (!Objects.equals(this.board, other.board)) {
+            return false;
+        }
+        return this.turn == other.turn;
     }
     
     @Override

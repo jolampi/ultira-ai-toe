@@ -5,6 +5,8 @@
  */
 package ultirai;
 
+import structure.List;
+
 /**
  *
  * @author Jori Lampi
@@ -13,6 +15,6 @@ public interface Player {
     
     public int move(GameState gameState);
     
-    public void end(Mark winner);
+    public void end(Mark winner, List<GameState> history);
     
 }

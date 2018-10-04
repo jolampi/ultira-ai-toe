@@ -5,6 +5,7 @@
  */
 package ultirai;
 
+import java.util.Arrays;
 import java.util.Random;
 import structure.Dictionary;
 import structure.List;
@@ -17,13 +18,11 @@ public class AIPlayer implements Player {
     
     private final Random random;
     private final Dictionary<GameState, GameStateData> data;
-    private final List<Turn> moveHistory;
     private boolean debug;
 
     public AIPlayer(Random random) {
         this.random = random;
         this.data = new Dictionary<>();
-        this.moveHistory = new List<>();
         this.debug = false;
     }
     
@@ -33,81 +32,63 @@ public class AIPlayer implements Player {
 
     @Override
     public int move(GameState gameState) {
-        if (!data.hasKey(gameState)) {
-            data.set(gameState, new GameStateData(gameState));
+        List<Integer> validMoves = gameState.getValidMoves();
+        float[] scores = new float[validMoves.size()];
+        float scoreSum = 0.0f;
+        for (int i = 0; i < scores.length; i++) {
+            GameState next = gameState.next(validMoves.get(i));
+            float score = data.hasKey(next) ? data.get(next).getScore() : GameStateData.DEFAULT_SCORE;
+            scores[i] = score;
+            scoreSum += score;
         }
-        int move = data.get(gameState).randomMove();
-        moveHistory.add(new Turn(gameState, move));
-        return move;
+        if (debug) System.out.println(Arrays.toString(scores));
+        float randomValue = random.nextFloat();
+        for (int i = 0; i < scores.length; i++) {
+            float weightedScore = scores[i] / scoreSum;
+            if (randomValue < weightedScore) {
+                return validMoves.get(i);
+            } else {
+                randomValue -= weightedScore;
+            }
+        }
+        // Never gets here
+        return validMoves.get(0);
     }
 
     @Override
-    public void end(Mark winner) {
-        for (int i = 0; i < moveHistory.size(); i++) {
-            Turn turn = moveHistory.get(i);
-            data.get(turn.gameState).update(turn.move, turn.gameState.getTurn() == winner);
+    public void end(Mark winner, List<GameState> moves) {
+        for (int i = 0; i < moves.size(); i++) {
+            GameState gs = moves.get(i);
+            if (!data.hasKey(gs)) {
+                data.set(gs, new GameStateData());
+            }
+            data.get(gs).increment(winner == gs.getTurn());
         }
-        moveHistory.clear();
     }
         
         
         
     private class GameStateData {
-        private final Dictionary<Integer, Entry> moves;
         
-        public GameStateData(GameState gameState) {
-            this.moves = new Dictionary<>();
-            List<Integer> validMoves = gameState.getValidMoves();
-            for (int i = 0; i < validMoves.size(); i++) {
-                moves.set(i, new Entry());
-            }
-        }
+        public static final float DEFAULT_SCORE = 0.5f;
         
-        public int randomMove() {
-            List<Integer> list = moves.keys();
-            int move = list.get(random.nextInt(list.size()));
-            if (debug) { debugPrint(list, move); }
-            return move;
-        }
-        
-        public void update(int move, boolean win) {
-            Entry entry = moves.get(move);
-            if (win) { entry.wins++; }
-            entry.tries++;
-        }
-        
-        private void debugPrint(List<Integer> keys, int move) {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < keys.size(); i++) {
-                int key = keys.get(i);
-                if (key == move) { sb.append('['); }
-                sb.append(key+1).append(':').append(moves.get(key).wins).append('/').append(moves.get(key).tries);
-                if (key == move) { sb.append(']'); }
-                if (i + 1 < keys.size()) { sb.append(", "); }
-            }
-            System.out.println(sb.toString());
-        }
-        
-    }
-    
-    private class Entry {
-        public int wins;
-        public int tries;
-        
-        public Entry() {
+        private int wins;
+        private int games;
+;        
+        public GameStateData() {
             this.wins = 0;
-            this.tries = 0;
+            this.games = 0;
         }
-    }
-    
-    private class Turn {
-        public GameState gameState;
-        public int move;
-
-        public Turn(GameState gameState, int move) {
-            this.gameState = gameState;
-            this.move = move;
+        
+        public void increment(boolean win) {
+            if (win) { wins++; }
+            games++;
         }
+        
+        public float getScore() {
+            return (3f + wins) / (3f + games);
+        }
+        
     }
     
 }

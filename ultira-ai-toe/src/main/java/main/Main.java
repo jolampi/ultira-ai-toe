@@ -22,11 +22,11 @@ public class Main {
         
         Player human = new ScannerPlayer(new Scanner(System.in));
         AIPlayer ai = new AIPlayer(new Random());
-//        for (int i = 0; i < 10000; i++) {
-//            Game.play(3, ai, ai);
-//        }
+        for (int i = 0; i < 100000; i++) {
+            Game.play(3, ai, ai);
+        }
         ai.setDebug(true);
-        Game.play(3, human, human);
+        Game.play(3, ai, human);
     }
     
 }
