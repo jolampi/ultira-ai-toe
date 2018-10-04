@@ -14,7 +14,7 @@ import structure.List;
  *
  * @author Jori Lampi
  */
-public class listTest {
+public class ListTest {
 
     @Test
     public void listTest() {
