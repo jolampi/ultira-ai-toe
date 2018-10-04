@@ -42,6 +42,7 @@ public class List<E> {
         return (n == 0);
     }
     
+    @SuppressWarnings("unchecked")
     public E get(int index) {
         checkIndex(index);
         return (E) list[index];
