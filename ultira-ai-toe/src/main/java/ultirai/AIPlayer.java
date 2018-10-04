@@ -33,7 +33,7 @@ public class AIPlayer implements Player {
     @Override
     public int move(GameState gameState) {
         List<Integer> validMoves = gameState.getValidMoves();
-        float[] scores = new float[validMoves.size()];
+        float[] scores = new float[validMoves.getSize()];
         float scoreSum = 0.0f;
         for (int i = 0; i < scores.length; i++) {
             GameState next = gameState.next(validMoves.get(i));
@@ -57,7 +57,7 @@ public class AIPlayer implements Player {
 
     @Override
     public void end(Mark winner, List<GameState> moves) {
-        for (int i = 0; i < moves.size(); i++) {
+        for (int i = 0; i < moves.getSize(); i++) {
             GameState gs = moves.get(i);
             if (!data.hasKey(gs)) {
                 data.set(gs, new GameStateData());

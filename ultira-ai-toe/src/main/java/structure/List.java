@@ -5,9 +5,6 @@
  */
 package structure;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 /**
  *
  * @author Jori Lampi
@@ -15,34 +12,48 @@ import java.util.Arrays;
  */
 public class List<E> {
     
-    private final ArrayList<E> list;
+    private static final int DEFAULT_CAPACITY = 10;
+    
+    private Object[] list;
+    private int n;
     
     public List() {
-        this.list = new ArrayList();
+        this.list = new Object[DEFAULT_CAPACITY];
+        this.n = 0;
     }
     
-    public int size() {
-        return list.size();
+    public int getSize() {
+        return n;
     }
     
     public void add(E e) {
-        list.add(e);
+        if (n == list.length) { grow(); }
+        list[n++] = e;
+    }
+    
+    private void grow() {
+        int newSize = (list.length < Integer.MAX_VALUE / 2) ? list.length << 1 : Integer.MAX_VALUE;
+        Object[] newList = new Object[newSize];
+        System.arraycopy(list, 0, newList, 0, list.length);
+        list = newList;
     }
     
     public boolean isEmpty() {
-        return list.isEmpty();
+        return (n == 0);
     }
     
     public E get(int index) {
-        return list.get(index);
+        checkIndex(index);
+        return (E) list[index];
     }
     
-    public E[] toArray(E[] array) {
-        return list.toArray(array);
+    private void checkIndex(int index) {
+        if (index < 0 || n <= index) { throw new ArrayIndexOutOfBoundsException(); }
     }
     
     public void clear() {
-        list.clear();
+        list = new Object[DEFAULT_CAPACITY];
+        n = 0;
     }
     
 }
