@@ -10,7 +10,7 @@ import java.util.Scanner;
 import ultirai.AIPlayer;
 import ultirai.Game;
 import ultirai.Player;
-import ultirai.ScannerPlayer;
+import ultirai.HumanPlayer;
 
 /**
  *
@@ -20,7 +20,7 @@ public class Main {
     
     public static void main(String[] args) {
         
-        Player human = new ScannerPlayer(new Scanner(System.in));
+        Player human = new HumanPlayer(new Scanner(System.in));
         AIPlayer ai = new AIPlayer(new Random());
         for (int i = 0; i < 100000; i++) {
             Game.play(3, ai, ai);

@@ -12,18 +12,25 @@ import structure.List;
  *
  * @author Jori Lampi
  */
-public class ScannerPlayer implements Player {
+public class HumanPlayer implements Player {
     
     private final Scanner scanner;
 
-    public ScannerPlayer(Scanner scanner) {
+    public HumanPlayer(Scanner scanner) {
         this.scanner = scanner;
     }
 
     @Override
     public int move(GameState gameState) {
         System.out.println(gameState.toString());
-        return scanner.nextInt()-1;
+        while (scanner.hasNextLine()) {
+            try {
+                return Integer.parseInt(scanner.nextLine().trim()) - 1;
+            } catch (NumberFormatException e) {
+                System.out.print("Illegal move. ");
+            }
+        }
+        throw new IllegalStateException();
     }
 
     @Override
