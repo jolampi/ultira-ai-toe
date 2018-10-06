@@ -23,10 +23,8 @@ final public class Board {
         Arrays.fill(board, row);
     }
     
-    private Board(Board previous, Mark mark, int x, int y) {
-        this.board = previous.board.clone();
-        this.board[y] = previous.board[y].clone();
-        this.board[y][x] = mark;
+    private Board(Mark[][] board) {
+        this.board = board;
     }
         
     public int getSize() {
@@ -68,7 +66,10 @@ final public class Board {
 }
     
     public Board next(Mark mark, int x, int y) {
-        return new Board(this, mark, x, y);
+        Mark[][] nextBoard = board.clone();
+        nextBoard[y] = board[y].clone();
+        nextBoard[y][x] = mark;
+        return new Board(nextBoard);
     }
     
     public char[][] toCharArray(char cross, char nought, char none) {
@@ -98,17 +99,11 @@ final public class Board {
         if (this == obj) {
             return true;
         }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
         final Board other = (Board) obj;
-        if (!Arrays.deepEquals(this.board, other.board)) {
-            return false;
-        }
-        return true;
+        return Arrays.deepEquals(this.board, other.board);
     }
     
 }
