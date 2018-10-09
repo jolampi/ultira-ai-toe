@@ -5,11 +5,7 @@
  */
 package ultiraiTest;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import ultirai.Board;
 import ultirai.Mark;
@@ -20,29 +16,17 @@ import ultirai.Mark;
  */
 public class BoardTest {
     
-    public BoardTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
-    
     @Test
-    public void boardInitialization() {
-        Board board = new Board(3);
-        Assert.assertArrayEquals("Board is clear at start", board.toCharArray('x', 'o', '.'), new char[][] {{'.','.','.'}, {'.','.','.'}, {'.','.','.'}});
+    public void illegalArgumentTest() {
+        for (int i : new int[] {-100, -10, -1, 0}) {
+            try {
+                Board board = new Board(i);
+                Assert.fail("Non-positive constructor arguments for size shouldn't be accepted.");
+            } catch (Exception e) {
+                if (e instanceof IllegalArgumentException) { continue; }
+                Assert.fail("Illegal arguments should be handled with IllegalArgumentException.");
+            }
+        }
     }
     
     @Test
@@ -57,22 +41,47 @@ public class BoardTest {
     @Test
     public void equality() {
         Board board = new Board(3);
-        Assert.assertEquals("Board equals with its reference", true, board.equals(board));
-        Assert.assertEquals("Board not equals with null", false, board.equals(null));
-        Assert.assertEquals("Board not equals with different class object", false, board.equals(new Object()));
-        Assert.assertEquals("Board equals with same sized board", true, board.equals(new Board(3)));
-        Assert.assertEquals("Board not equals with different sized board", false, board.equals(new Board(5)));
+        Assert.assertTrue("Board equals with its reference", board.equals(board));
+        Assert.assertFalse("Board not equals with null", board.equals(null));
+        Assert.assertFalse("Board not equals with different class object", board.equals(new Object()));
+        Assert.assertTrue("Board equals with same sized board", board.equals(new Board(3)));
+        Assert.assertFalse("Board not equals with different sized board", board.equals(new Board(5)));
     }
     
     @Test
     public void resolving() {
-        Board board = new Board(3);
+        Board board = new Board(10);
         Assert.assertEquals("No winner at start", Mark.NONE, board.resolve());
-        for (int i = 0; i < 3; i++) {
-            board = board.next(Mark.CROSS, 0, i).next(Mark.CROSS, 1, i).next(Mark.CROSS, 2, i);
-            Assert.assertEquals("Row " + (i+1) + " winner", Mark.CROSS, board.resolve());
-            board = board.next(Mark.NONE, 0, i).next(Mark.NONE, 1, i).next(Mark.NONE, 2, i);
+        
+        for (int y = 0; y < 10; y++) {
+            // row
+            board = new Board(10);
+            for (int x = 0; x < 10; x++) {
+                board = board.next(Mark.CROSS, x, y);
+            }
+            Assert.assertEquals("Horizontal row " + y + " winner", Mark.CROSS, board.resolve());
+            
+            // column
+            board = new Board(10);
+            for (int x = 0; x < 10; x++) {
+                board = board.next(Mark.NOUGHT, y, x);
+            }
+            Assert.assertEquals("Vertical row " + y + " winner", Mark.NOUGHT, board.resolve());
         }
+        
+        // diagonal
+        board = new Board(10);
+        for (int i = 0; i < 10; i++) {
+            board = board.next(Mark.CROSS, i, i);
+        }
+        Assert.assertEquals("Diagonal row winner", Mark.CROSS, board.resolve());
+        
+        // back-diagonal (?)
+        board = new Board(10);
+        for (int i = 0; i < 10; i++) {
+            board = board.next(Mark.NOUGHT, i, board.getSize() - 1 - i);
+        }
+        Assert.assertEquals("Back-diagonal row winner", Mark.NOUGHT, board.resolve());
     }
     
 }
