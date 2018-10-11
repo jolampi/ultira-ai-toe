@@ -28,7 +28,7 @@ public class Dictionary<K,E> {
     }
     
     public void set(K key, E element) {
-        if (elements > 0.9 * buckets.length) { moreBuckets(); }
+        if (elements > FILL_PERCENT * buckets.length) { moreBuckets(); }
         addToBucket(key, element);
         elements++;
     }
@@ -84,8 +84,6 @@ public class Dictionary<K,E> {
     
     @SuppressWarnings("unchecked")
     private Node getNode(Object key) {
-        int bucket = getBucket(key);
-        if (bucket >= buckets.length) { return null; }
         Node node = (Node) buckets[getBucket(key)];
         while (node != null) {
             if (node.key.equals(key)) { return node; }
