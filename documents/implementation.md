@@ -14,6 +14,10 @@ The AI player stores data from the results of passed games in a dictionary struc
 ### ultirai
 
 #### Board.java
+|          | Board() | createBoard() | next() | toCharArray() | resolve() |
+|----------|---------|---------------|--------|---------------|-----------|
+| O(time)  | k\*n    | n             | n      | n^2           | n^2       |
+| O(space) | k\*n    | n             | n      | n^2           | 1         |
 
 ```python
 Mark[][] createBoard(n)
@@ -34,11 +38,24 @@ To create a board where a mark is changed in one position while not affecting th
 
 As effectively all boards are derived from this method, we get the time and space requirements of *O(k\*n)* for any arbitrary instance of a board where *k* is the number of times this method was called.
 
-|             |O(time)|O(space)|
-|-------------|-------|--------|
-|Board()      |k\*n   |k\*n    |
-|createBoard()|n      |n       |
-|next()       |n      |n       |
+```python
+char[][] toCharArray(cross, nought, none)
+  array = [n][n]
+  for y = [0, n)
+    for x = [0, n)
+      array[y][x] = match(board[y][x], args)
+  return array
+```
+Simply create a 2D array and fill it with appropriate character values. Space requirement of *O(n^2)* for creating the array. This in addition with two nested loops will yield the time requirement of *O(n^2)*.
+
+```python
+Mark resolve()
+  for n horizontal, n vertical and 2 diagonal rows
+    result = resolveRow(...)
+    if (result != NONE) return result
+  return NONE
+```
+This method attempts to determine the winner of the board by checking all possible *O(n + n + 2) = O(n)* rows. The helper method `resolveRow(...)` simply crawls along the given row while counting up to a sufficient streak, taking O(n) time to do so. In the worst case scenario no winner will be returned, taking this function *O(n^2)* time return the result. The method will only need a constant amount of variables however, so the space requirement is *O(1)*.
 
 ## Areas of improvement
 * Reduce the entropy of gamestates by detecting symmetries.
