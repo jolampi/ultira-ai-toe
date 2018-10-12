@@ -39,3 +39,11 @@ So far the AI does seem to work on a basic level but it is very easy to run into
 One thing I need to figure out is the testing part of the AI. As the measure of performing and performance in this case is very empirical, any traditional methods won't make much sense.
 
 Time spent this week: 18 hours.
+
+
+# Week 6
+It took me until this week to have the revelation that little relevant data gathered along the game is much better than a lot of unusable bits gathered at the start. This is relatively easy change so I can make it in time before demos. I will also add some configuration options by then.
+
+I have been quite busy this week but I finally implemented the Dictionary structure and began the proper documenting of the code. As I finish up classes by writing javadocs and comprehensive JUnit tests I will know what I need to bring up in implementation and testing documents.
+
+Time spent this week: 10 hours.
