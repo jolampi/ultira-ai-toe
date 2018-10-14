@@ -6,7 +6,6 @@
 package ultirai;
 
 import java.util.Scanner;
-import structure.List;
 
 /**
  *
@@ -22,7 +21,7 @@ public class HumanPlayer implements Player {
 
     @Override
     public int move(GameState gameState) {
-        System.out.println(gameState.toString());
+//        System.out.println(gameState.toString());
         while (scanner.hasNextLine()) {
             try {
                 return Integer.parseInt(scanner.nextLine().trim()) - 1;
@@ -31,11 +30,6 @@ public class HumanPlayer implements Player {
             }
         }
         throw new IllegalStateException();
-    }
-
-    @Override
-    public void end(Mark winner, List<GameState> moves) {
-        System.out.println(winner.toString() + " wins.");
     }
     
 }

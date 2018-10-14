@@ -15,6 +15,4 @@ public interface Player {
     
     public int move(GameState gameState);
     
-    public void end(Mark winner, List<GameState> history);
-    
 }

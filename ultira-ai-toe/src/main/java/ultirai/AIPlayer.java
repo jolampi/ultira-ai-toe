@@ -18,20 +18,21 @@ public class AIPlayer implements Player {
     
     private final Random random;
     private final Dictionary<GameState, GameStateData> data;
-    private boolean debug;
+    private boolean training;
 
     public AIPlayer(Random random) {
         this.random = random;
         this.data = new Dictionary<>();
-        this.debug = false;
-    }
-    
-    public void setDebug(boolean debug) {
-        this.debug = debug;
+        this.training = false;
     }
 
     @Override
     public int move(GameState gameState) {
+        if (!training) {
+            training = true;
+            Game.trainAI(this, gameState, 1000);
+            training = false;
+        }
         List<Integer> validMoves = gameState.getValidMoves();
         float[] scores = new float[validMoves.getSize()];
         float scoreSum = 0.0f;
@@ -41,7 +42,6 @@ public class AIPlayer implements Player {
             scores[i] = score;
             scoreSum += score;
         }
-        if (debug) System.out.println(Arrays.toString(scores));
         float randomValue = random.nextFloat();
         for (int i = 0; i < scores.length; i++) {
             float weightedScore = scores[i] / scoreSum;
@@ -55,8 +55,7 @@ public class AIPlayer implements Player {
         return validMoves.get(0);
     }
 
-    @Override
-    public void end(Mark winner, List<GameState> moves) {
+    public void learn(Mark winner, List<GameState> moves) {
         for (int i = 0; i < moves.getSize(); i++) {
             GameState gs = moves.get(i);
             if (!data.hasKey(gs)) {
