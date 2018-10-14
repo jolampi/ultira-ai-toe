@@ -64,13 +64,43 @@ final public class SuperBoard {
             int offsetY = y * size;
             for (int x = 0; x < size; x++) {
                 int offsetX = x * size;
+                char[][] subArray;
                 switch (board.getMarkAt(x, y)) {
+                    case CROSS:
+                        subArray = cross(size, cross, none);
+                        break;
+                    case NOUGHT:
+                        subArray = nought(size, nought, none);
+                        break;
                     default:
-                        char[][] subArray = subBoards[y][x].toCharArray(cross, nought, none);
-                        for (int i = 0; i < subArray.length; i++) {
-                            System.arraycopy(subArray[i], 0, array[offsetY+i], offsetX, size);
-                        }
+                        subArray = subBoards[y][x].toCharArray(cross, nought, none);
+                        
                 }
+                for (int i = 0; i < subArray.length; i++) {
+                    System.arraycopy(subArray[i], 0, array[offsetY+i], offsetX, size);
+                }
+            }
+        }
+        return array;
+    }
+    
+    private char[][] cross(int size, char cross, char none) {
+        char[][] array = new char[size][size];
+        int end = size - 1;
+        for (int y = 0; y < size; y++) {
+            for (int x = 0; x < size; x++) {
+                array[y][x] = (x == y || x + y == end) ? cross : none;
+            }
+        }
+        return array;
+    }
+    
+    private char[][] nought(int size, char nought, char none) {
+        char[][] array = new char[size][size];
+        int end = size - 1;
+        for (int y = 0; y < size; y++) {
+            for (int x = 0; x < size; x++) {
+                array[y][x] = (x == 0 || x == end || y == 0 || y == end) ? nought : none;
             }
         }
         return array;

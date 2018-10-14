@@ -135,7 +135,7 @@ final public class GameState {
         for (int y = 0; y < chars.length;) {
             for (int x = 0; x < chars[y].length;) {
                 sb.append(chars[y][x]);
-                if ((++x % breakpoint) == 0) { sb.append(' '); }
+                if ((++x % breakpoint) == 0) { sb.append("  "); }
             }
             if (++y < chars.length) {
                 sb.append('\n');

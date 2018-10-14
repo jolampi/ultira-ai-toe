@@ -9,7 +9,6 @@ import java.util.Random;
 import java.util.Scanner;
 import ultirai.AIPlayer;
 import ultirai.Game;
-import ultirai.GameState;
 import ultirai.Player;
 import ultirai.HumanPlayer;
 
@@ -23,7 +22,6 @@ public class Main {
         
         Player human = new HumanPlayer(new Scanner(System.in));
         AIPlayer ai = new AIPlayer(new Random());
-//        Game.trainAI(ai, new GameState(3), 10000);
         Game.play(3, ai, human);
     }
     

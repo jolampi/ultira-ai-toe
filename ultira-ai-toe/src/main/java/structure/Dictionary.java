@@ -14,7 +14,7 @@ package structure;
 public class Dictionary<K,E> {
     
     // Assured with tests to work with this many values  
-    public static final int MAX_CAPASITY = 2 << 22;
+    public static final int MAX_CAPASITY = 1 << 24;
     
     private static final double FILL_PERCENT = 0.9;
     private static final int INTERNAL_MAX_CAPACITY = (int) (MAX_CAPASITY / FILL_PERCENT);

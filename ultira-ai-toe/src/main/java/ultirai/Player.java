@@ -5,8 +5,6 @@
  */
 package ultirai;
 
-import structure.List;
-
 /**
  *
  * @author Jori Lampi

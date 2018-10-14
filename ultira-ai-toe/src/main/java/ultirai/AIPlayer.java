@@ -5,7 +5,6 @@
  */
 package ultirai;
 
-import java.util.Arrays;
 import java.util.Random;
 import structure.Dictionary;
 import structure.List;
@@ -15,6 +14,8 @@ import structure.List;
  * @author Jori Lampi
  */
 public class AIPlayer implements Player {
+    
+    private final static int MAX_LEARN_DEPTH = 6;
     
     private final Random random;
     private final Dictionary<GameState, GameStateData> data;
@@ -56,7 +57,7 @@ public class AIPlayer implements Player {
     }
 
     public void learn(Mark winner, List<GameState> moves) {
-        for (int i = 0; i < moves.getSize(); i++) {
+        for (int i = 0; i < Math.min(moves.getSize(), MAX_LEARN_DEPTH); i++) {
             GameState gs = moves.get(i);
             if (!data.hasKey(gs)) {
                 data.set(gs, new GameStateData());
