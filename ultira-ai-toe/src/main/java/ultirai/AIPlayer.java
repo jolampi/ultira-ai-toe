@@ -15,7 +15,7 @@ import structure.List;
  */
 public class AIPlayer implements Player {
     
-    private final static int MAX_LEARN_DEPTH = 6;
+    private final static int MAX_LEARN_DEPTH = 7;
     
     private final Random random;
     private final Dictionary<GameState, GameStateData> data;
@@ -35,25 +35,61 @@ public class AIPlayer implements Player {
             training = false;
         }
         List<Integer> validMoves = gameState.getValidMoves();
+        int n = validMoves.getSize();
+        GameStateData[] gsds = new GameStateData[n];
+        int playsTotal = 0;
+        int dataFound = 0;
+        for (int i = 0; i < n; i++) {
+            GameState next = gameState.next(validMoves.get(i));
+            if (data.hasKey(next)) {
+                GameStateData gsd = data.get(next);
+                gsds[i] = gsd;
+                playsTotal += gsd.games;
+                dataFound++;
+            }
+        }
+        if (dataFound != n) { return validMoves.get(random.nextInt(n)); }
+        double twoLog = 2 * Math.log(playsTotal);
+        int bestIndex = 0;
+        boolean maximize = (gameState.getTurn() == gameState.next(validMoves.get(0)).getTurn());
+        double bestScore = 0;
+        for (int i = 0; i < n; i++) {
+            GameStateData gsd = gsds[i];
+            int wins = (maximize) ? gsd.wins : gsd.games - gsd.wins;
+            double score = wins * 1.0 / gsd.games + Math.sqrt(twoLog / gsd.games);
+            if (score > bestScore) {
+                bestIndex = i;
+                bestScore = score;
+            }
+        }
+        //if (!training) { System.out.print("w" + gsds[bestIndex].wins + " g" + gsds[bestIndex].games + " s" + bestScore + " "); }
+        return validMoves.get(bestIndex);
+        
+        /*
         float[] scores = new float[validMoves.getSize()];
         float scoreSum = 0.0f;
         for (int i = 0; i < scores.length; i++) {
             GameState next = gameState.next(validMoves.get(i));
-            float score = data.hasKey(next) ? data.get(next).getScore() : GameStateData.DEFAULT_SCORE;
+            float score = 0.1f;
+            if (data.hasKey(next)) {
+                GameStateData gsd = data.get(next);
+                score+= gsd.wins / gsd.games;
+            }
             scores[i] = score;
             scoreSum += score;
         }
-        float randomValue = random.nextFloat();
+        float randomValue = random.nextFloat() * scoreSum;
         for (int i = 0; i < scores.length; i++) {
-            float weightedScore = scores[i] / scoreSum;
-            if (randomValue < weightedScore) {
+            float score = scores[i];
+            if (randomValue < score) {
                 return validMoves.get(i);
             } else {
-                randomValue -= weightedScore;
+                randomValue -= score;
             }
         }
         // Never gets here
         return validMoves.get(0);
+*/
     }
 
     public void learn(Mark winner, List<GameState> moves) {
@@ -74,7 +110,7 @@ public class AIPlayer implements Player {
         
         private int wins;
         private int games;
-;        
+        
         public GameStateData() {
             this.wins = 0;
             this.games = 0;
@@ -83,10 +119,6 @@ public class AIPlayer implements Player {
         public void increment(boolean win) {
             if (win) { wins++; }
             games++;
-        }
-        
-        public float getScore() {
-            return (3f + wins) / (3f + games);
         }
         
     }

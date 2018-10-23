@@ -102,6 +102,17 @@ final public class Board {
         return board[y][x];
     }
     
+    public boolean isFilled() {
+        for (Mark[] row : board) {
+            for (Mark mark : row) {
+                if (mark == Mark.NONE) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
     /**
      * Creates and returns the char array representation of the board. The board
      * returned will not be maintained by this object so it can be manipulated

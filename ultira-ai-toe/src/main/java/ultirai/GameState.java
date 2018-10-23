@@ -34,6 +34,10 @@ final public class GameState {
         return turn;
     }
     
+    public SuperBoard getBoard() {
+        return board;
+    }
+    
     public boolean isBoardActive() {
         return activeX >= 0;
     }
@@ -44,6 +48,7 @@ final public class GameState {
     }
     
     private boolean isValidMove(int x, int y) {
+        if (!isBoardActive() && board.getSubBoardAt(x, y).isFilled()) { return false; }
         return getActiveBoard().getMarkAt(x, y) == Mark.NONE;
     }
     
@@ -88,6 +93,8 @@ final public class GameState {
         SuperBoard nextBoard = board.next(turn, activeX, activeY, x, y);
         Mark nextTurn = (turn == Mark.NOUGHT) ? Mark.CROSS : Mark.NOUGHT;
         if (nextBoard.getBoard().getMarkAt(x, y) == Mark.NONE) {
+            //GameState gs = new GameState(nextBoard, nextTurn, x, y);
+            //if (gs.hasValidMoves()) { return gs; }
             return new GameState(nextBoard, nextTurn, x, y);
         }
         return new GameState(nextBoard, nextTurn, -1, -1);
