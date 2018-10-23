@@ -62,34 +62,7 @@ public class AIPlayer implements Player {
                 bestScore = score;
             }
         }
-        //if (!training) { System.out.print("w" + gsds[bestIndex].wins + " g" + gsds[bestIndex].games + " s" + bestScore + " "); }
         return validMoves.get(bestIndex);
-        
-        /*
-        float[] scores = new float[validMoves.getSize()];
-        float scoreSum = 0.0f;
-        for (int i = 0; i < scores.length; i++) {
-            GameState next = gameState.next(validMoves.get(i));
-            float score = 0.1f;
-            if (data.hasKey(next)) {
-                GameStateData gsd = data.get(next);
-                score+= gsd.wins / gsd.games;
-            }
-            scores[i] = score;
-            scoreSum += score;
-        }
-        float randomValue = random.nextFloat() * scoreSum;
-        for (int i = 0; i < scores.length; i++) {
-            float score = scores[i];
-            if (randomValue < score) {
-                return validMoves.get(i);
-            } else {
-                randomValue -= score;
-            }
-        }
-        // Never gets here
-        return validMoves.get(0);
-*/
     }
 
     public void learn(Mark winner, List<GameState> moves) {
