@@ -9,14 +9,27 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- *
+ * An immutable class that represents a square-shaped board of tic
+ * 
  * @author Jori Lampi
  */
 final public class SuperBoard {
     
+    // Uses a Board as a lookup for solved boards
     private final Board board;
+    
+    // Internally a 2D array
     private final Board[][] subBoards;
     
+    /**
+     * Initializes new empty SuperBoard.
+     * <p>
+     * Like with Board, a reduced amount of memory is required. However, as a
+     * SuperBoard consists of a square amount of normal boards, the time and
+     * space requirements are squared as well.
+     * 
+     * @param size the root of the SuperBoard's squared size
+     */
     public SuperBoard(int size) {
         this.board = new Board(size);
         this.subBoards = new Board[size][];
@@ -25,27 +38,29 @@ final public class SuperBoard {
         Arrays.fill(this.subBoards, row);
     }
     
+    /**
+     * Private access only. Creates a new SuperBoard directly from the given
+     * fields. No validations are made so the responsibility for the object's
+     * validity is on the caller.
+     * 
+     * @param board
+     * @param subBoards 
+     */
     private SuperBoard(Board board, Board[][] subBoards) {
         this.board = board;
         this.subBoards = subBoards;
     }
     
-    public Board getBoard() {
-        return board;
-    }
-    
-    public Board getSubBoardAt(int x, int y) {
-        return subBoards[y][x];
-    }
-    
-    public int getSize() {
-        return board.getSize();
-    }
-    
-    public Mark resolve() {
-        return board.resolve();
-    }
-    
+    /**
+     * Returns the next SuperBoard after the given mark is set to given position.
+     * 
+     * @param mark   Mark being put to board
+     * @param boardX index of the board's x-position
+     * @param boardY index of the board's y-position
+     * @param x      index of the mark's x-position on board
+     * @param y      index of the mark's y-position on board
+     * @return next SuperBoard
+     */
     public SuperBoard next(Mark mark, int boardX, int boardY, int x, int y) {
         Board changed = subBoards[boardY][boardX].next(mark, x, y);
         Board[][] nextBoards = subBoards.clone();
@@ -56,6 +71,48 @@ final public class SuperBoard {
         return new SuperBoard(nextBoard, nextBoards);
     }
     
+    /**
+     * Returns the master board
+     * 
+     * @return Board representing the overall state of the boards
+     */
+    public Board getBoard() {
+        return board;
+    }
+    
+    /**
+     * Gets an individual board in the given position.
+     * 
+     * @param x index of the horizontal dimension
+     * @param y index of the vertical dimension
+     * @return 
+     */
+    public Board getSubBoardAt(int x, int y) {
+        return subBoards[y][x];
+    }
+    
+    /**
+     * Gets the size of the board.
+     * 
+     * @return size of the board
+     */
+    public int getSize() {
+        return board.getSize();
+    }
+    
+    /**
+     * Creates and returns the char array representation of the SuperBoard. The
+     * board returned will not be maintained by this object so it can be
+     * manipulated as required.
+     * <p>
+     * Boards that are won are written as crosses and noughts formed of their
+     * respective characters.
+     * 
+     * @param cross  representation of cross in returned array
+     * @param nought representation of nought in returned array
+     * @param none   representation of an empty position
+     * @return 2D char array with squared dimensions of the board
+     */
     public char[][] toCharArray(char cross, char nought, char none) {
         int size = getSize();
         int sizeSquare = size * size;
@@ -66,15 +123,9 @@ final public class SuperBoard {
                 int offsetX = x * size;
                 char[][] subArray;
                 switch (board.getMarkAt(x, y)) {
-                    case CROSS:
-                        subArray = cross(size, cross, none);
-                        break;
-                    case NOUGHT:
-                        subArray = nought(size, nought, none);
-                        break;
-                    default:
-                        subArray = subBoards[y][x].toCharArray(cross, nought, none);
-                        
+                    case CROSS: subArray = cross(size, cross, none); break;
+                    case NOUGHT: subArray = nought(size, nought, none); break;
+                    default: subArray = subBoards[y][x].toCharArray(cross, nought, none);
                 }
                 for (int i = 0; i < subArray.length; i++) {
                     System.arraycopy(subArray[i], 0, array[offsetY+i], offsetX, size);
@@ -82,6 +133,16 @@ final public class SuperBoard {
             }
         }
         return array;
+    }
+    
+    /**
+     * Attempts to resolve the value (or winner) of the SuperBoard by checking
+     * all suitable rows for streaks of winned boards.
+     * 
+     * @return mark representing the result of the board.
+     */
+    public Mark resolve() {
+        return board.resolve();
     }
     
     private char[][] cross(int size, char cross, char none) {

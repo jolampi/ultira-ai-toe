@@ -102,10 +102,15 @@ final public class Board {
         return board[y][x];
     }
     
+    /**
+     * 
+     * 
+     * @return true if the grid is filled with CROSS and NOUGHT
+     */
     public boolean isFilled() {
         for (Mark[] row : board) {
             for (Mark mark : row) {
-                if (mark == Mark.NONE) {
+                if (mark == Mark.NONE || mark == Mark.TIE) {
                     return false;
                 }
             }

@@ -11,6 +11,6 @@ package ultirai;
  */
 public enum Mark {
     
-    CROSS, NOUGHT, NONE
+    CROSS, NOUGHT, NONE, TIE
     
 }
