@@ -17,22 +17,28 @@ import structure.Dictionary;
 public class DictionaryTest {
     
     @Test
-    public void illegalInput() {
-    
+    public void settingAndGetting() {
+        Dictionary<String, Object> dictionary = new Dictionary<>();
+        String key = "foo";
+        Assert.assertFalse(dictionary.hasKey(key));
+        Assert.assertNull(dictionary.get(key));
+        dictionary.set(key, null);
+        Assert.assertTrue(dictionary.hasKey(key));
+        Assert.assertNull(dictionary.get(key));
+        dictionary.set(key, new Object());
+        Assert.assertNotNull(key);
     }
     
     @Test
-    public void settingAndGetting() {
-        Object a = new Object();
-        Object b = new Object();
-        Object c = new Object();
-        Dictionary<String, Object> dictionary = new Dictionary<>();
-        dictionary.set("foo", a);
-        dictionary.set("bar", b);
-        dictionary.set("biz", c);
-        Assert.assertEquals(a, dictionary.get("foo"));
-        Assert.assertEquals(c, dictionary.get("biz"));
-        Assert.assertEquals(b, dictionary.get("bar"));
+    public void readAndWrite() {
+        Dictionary<Long, Integer> dictionary = new Dictionary<>();
+        Random random = new Random(1984);
+        for (int i = 0; i < 10000000; i++) {
+            Long key = random.nextLong();
+            Integer value = random.nextInt();
+            dictionary.set(key, value);
+            Assert.assertEquals(value, dictionary.get(key));
+        }
     }
     
     @Test
@@ -46,6 +52,10 @@ public class DictionaryTest {
         for (int i = 0; i < Dictionary.MAX_CAPASITY; i++) {
             Assert.assertEquals("Check value", (Object)random.nextInt(), dictionary.get(i));
         }
+        try {
+            dictionary.set(Dictionary.MAX_CAPASITY, 0);
+            Assert.fail("Exceeding capasity should throw OutOfMemoryException");
+        } catch (OutOfMemoryError e) {}
     }
     
 }
