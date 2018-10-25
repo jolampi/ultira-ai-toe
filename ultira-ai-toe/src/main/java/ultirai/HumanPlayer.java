@@ -21,15 +21,14 @@ public class HumanPlayer implements Player {
 
     @Override
     public int move(GameState gameState) {
-//        System.out.println(gameState.toString());
         while (scanner.hasNextLine()) {
             try {
-                return Integer.parseInt(scanner.nextLine().trim()) - 1;
-            } catch (NumberFormatException e) {
-                System.out.print("Illegal move. ");
-            }
+                int move = Integer.parseInt(scanner.nextLine().trim()) - 1;
+                if (gameState.isValidMove(move)) { return move; }
+            } catch (NumberFormatException e) {}
+            System.out.println("Illegal move.");
         }
-        throw new IllegalStateException();
+        throw new IllegalStateException("Scanner is empty.");
     }
     
 }
