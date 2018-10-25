@@ -11,6 +11,37 @@ The AI player stores data from the results of passed games in a dictionary struc
 
 ## Time and space requirement analysis
 
+### structure
+
+#### List.java
+|          | List()  | add() | get() | clear() |
+|----------|---------|-------|-------|---------|
+| O(time)  | O(n)    | O(1)  | O(1)  | O(n)    |
+| O(space) | O(n)    | O(1)  | O(1)  | O(n)    |
+
+```javascript
+add(element)
+  if n == list.length
+    grow()
+  list[n] = element
+  n++
+```
+New element will be added in a constant time if internal array isn't yet full. If it is, the *grow()* fuction is called, which effectively doubles the size of the array. This will take O(n) but is called rarely enought that the amortized time requirement is *O(n)*, which also goes for the space.
+
+```javascript
+get(index)
+  checkIndex(index);
+  return list[index]
+```
+*checkIndex()* does a simple bound check which happens in a constant time. Thus this method takes a constant time and since no external methods are required, space.
+
+```javascript
+clear()
+  list = [D]
+  n = 0
+```
+Effectively the same happends with the constructor, so both are handled here. Allocating the list is a linear operation, denoted as *D* for *default* here as *n* was reserved for element counter.
+
 ### ultirai
 
 #### Board.java
