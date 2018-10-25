@@ -1,6 +1,6 @@
 # User manual
 
-The program can be launched with `java -jar ultira-au-toe.jar`. A game of user versus AI will be played with a coin toss deciding which one will start.
+The program can be launched with `java -jar ultira-ai-toe.jar`. A game of user versus AI will be played with a coin toss deciding which one will start.
 
 The grid is numbered from left to right, up to down starting from 1. For example, a board of size 3 would have to boards in the following order:
 ```
