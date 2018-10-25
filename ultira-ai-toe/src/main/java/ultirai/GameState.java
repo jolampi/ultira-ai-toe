@@ -9,16 +9,28 @@ import java.util.Objects;
 import structure.List;
 
 /**
- *
+ * Immutable class representing any possible state of the game
+ * 
  * @author Jori Lampi
  */
 final public class GameState {
     
+    // The game board
     private final SuperBoard board;
+    
+    // Indexes of the game board
     private final int activeX;
     private final int activeY;
+    
+    // Mark that will be placed on board next. Either a NOUGHT or CROSS.
     private final Mark turn;
     
+    /**
+     * Creates a new first GameState with empty board, no board active and
+     * cross as the starting player.
+     * 
+     * @param size 
+     */
     public GameState(int size) {
         this(new SuperBoard(size), Mark.CROSS, -1, -1);
     }
@@ -30,15 +42,25 @@ final public class GameState {
         this.turn = turn;
     }
     
+    /**
+     * @return mark that is placed on board next.
+     */
     public Mark getTurn() {
         return turn;
     }
     
-    public SuperBoard getBoard() {
+    /**
+     * @return the SuperBoard of the given GameState
+     */
+    public SuperBoard getSuperBoard() {
         return board;
     }
     
+    /**
+     * @return true if the the next move is placed on board
+     */
     public boolean isBoardActive() {
+        // Only needs to check either coordinate
         return activeX >= 0;
     }
     
@@ -48,6 +70,8 @@ final public class GameState {
     }
     
     private boolean isValidMove(int x, int y) {
+        int size = board.getSize();
+        if (x < 0 || x >= size || y < 0 || y >= size) { return false; }
         if (!isBoardActive() && board.getSubBoardAt(x, y).isFilled()) { return false; }
         return getActiveBoard().getMarkAt(x, y) == Mark.NONE;
     }
@@ -83,7 +107,7 @@ final public class GameState {
     
     public GameState next(int move) {
         int size = board.getSize();
-        if (move < 0 || move >= size * size) { throw new IllegalArgumentException("Move out of bounds."); }
+//        if (move < 0 || move >= size * size) { throw new IllegalArgumentException("Move out of bounds."); }
         int x = move % board.getSize();
         int y = move / board.getSize();
         if (!isValidMove(x, y)) { throw new IllegalStateException("Illegal move."); }
@@ -93,8 +117,6 @@ final public class GameState {
         SuperBoard nextBoard = board.next(turn, activeX, activeY, x, y);
         Mark nextTurn = (turn == Mark.NOUGHT) ? Mark.CROSS : Mark.NOUGHT;
         if (nextBoard.getBoard().getMarkAt(x, y) == Mark.NONE) {
-            //GameState gs = new GameState(nextBoard, nextTurn, x, y);
-            //if (gs.hasValidMoves()) { return gs; }
             return new GameState(nextBoard, nextTurn, x, y);
         }
         return new GameState(nextBoard, nextTurn, -1, -1);
