@@ -39,7 +39,7 @@ public class Game {
                 case NOUGHT: nought++; break;
                 default: tie++;
             }
-            double averageTime = (System.currentTimeMillis() - start) * 0.001 / (i + 1);
+            double averageTime = (System.currentTimeMillis() - start) * threads * 0.001 / (i + 1);
             
             System.out.print("\raverage game=" + FORMAT.format(averageTime) + "s; winX=" + cross + ", winO=" + nought + ", tied=" + tie);
         }
