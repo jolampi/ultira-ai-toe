@@ -29,7 +29,7 @@ final public class GameState {
      * Creates a new first GameState with empty board, no board active and
      * cross as the starting player.
      * 
-     * @param size 
+     * @param size size of the game
      */
     public GameState(int size) {
         this(new SuperBoard(size), Mark.CROSS, -1, -1);

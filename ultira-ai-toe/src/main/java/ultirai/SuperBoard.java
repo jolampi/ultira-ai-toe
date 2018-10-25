@@ -85,7 +85,7 @@ final public class SuperBoard {
      * 
      * @param x index of the horizontal dimension
      * @param y index of the vertical dimension
-     * @return 
+     * @return board in the specified position
      */
     public Board getSubBoardAt(int x, int y) {
         return subBoards[y][x];
