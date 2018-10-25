@@ -19,11 +19,17 @@ public class AIPlayer implements Player {
     
     private final Random random;
     private final Dictionary<GameState, GameStateData> data;
+    private final int timeLimit;
     private boolean training;
-
-    public AIPlayer(Random random) {
+    
+    public AIPlayer(int timeLimit) {
+        this(new Random(), timeLimit);
+    }
+    
+    public AIPlayer(Random random, int timeLimit) {
         this.random = random;
         this.data = new Dictionary<>();
+        this.timeLimit = timeLimit;
         this.training = false;
     }
 
@@ -31,7 +37,7 @@ public class AIPlayer implements Player {
     public int move(GameState gameState) {
         if (!training) {
             training = true;
-            Game.trainAI(this, gameState, 1000);
+            Game.trainAI(this, gameState, timeLimit);
             training = false;
         }
         List<Integer> validMoves = gameState.getValidMoves();
