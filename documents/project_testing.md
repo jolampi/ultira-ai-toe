@@ -4,9 +4,9 @@ Most of the testing will be done with JUnit. Test classed used are included in t
 
 ## JUnit coverage comprehensiveness
 The progress of providing coverage for relevant classes.
-* [ ] structure
-  * [ ] Dictionary
-  * [ ] List
+* [x] structure
+  * [x] Dictionary
+  * [x] List
 * [ ] ultirai
   * [x] Board
   * [ ] Game
