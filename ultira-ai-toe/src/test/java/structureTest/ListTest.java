@@ -11,7 +11,8 @@ import org.junit.Test;
 import structure.List;
 
 /**
- *
+ * 
+ * 
  * @author Jori Lampi
  */
 public class ListTest {
@@ -21,11 +22,6 @@ public class ListTest {
         List<Object> list = new List<>();
         Assert.assertTrue("List empty at start", list.isEmpty());
         Assert.assertEquals("Size is 0 at start", 0, list.getSize());
-        
-        try {
-            list.get(0);
-            Assert.fail("Invalid call should throw ArrayIndexOutOfBoundsException");
-        } catch (ArrayIndexOutOfBoundsException e) {}
         
         Object obj = new Object();
         list.add(obj);
@@ -39,14 +35,29 @@ public class ListTest {
     }
     
     @Test
+    public void boundTest() {
+        List<Object> list = new List<>();
+        list.add(new Object());
+        try {
+            list.get(-1);
+            Assert.fail();
+        } catch (ArrayIndexOutOfBoundsException e) {}
+        list.get(0);
+        try {
+            list.get(1);
+            Assert.fail();
+        } catch (ArrayIndexOutOfBoundsException e) {}
+    }
+    
+    @Test
     public void orderTest() {
         List<Object> list = new List<>();
         Random random = new Random(1338);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 1000; i++) {
             list.add(random.nextInt());
         }
         random = new Random(1338);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 1000; i++) {
             Assert.assertEquals(random.nextInt(), (int) list.get(i));
         }
     }
@@ -55,9 +66,13 @@ public class ListTest {
     public void capacityTest() {
         final List<Object> list = new List<>();
         final Object obj = new Object();
-        for (int i = 0; i < 100000000; i++) {
+        for (int i = 0; i < List.MAX_CAPASITY; i++) {
             list.add(obj);
         }
+        try {
+            list.add(obj);
+            Assert.fail();
+        } catch (OutOfMemoryError e) {}
     }
     
 }
