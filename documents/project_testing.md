@@ -33,4 +33,4 @@ The progress of providing coverage for relevant classes.
   * [ ] GameState
   * [ ] SuperBoard
 
-The unchecked boxes mark classes that I didn't get around to sufficiently cover. This was mainly due to the rapid explosion of permutations that the "superboard" ends up with that are very hard to cover. There is also a baffling bug appearing on size 4 games where the game would end with spare tiles still remaining.
+The unchecked boxes mark classes that I didn't get around to sufficiently cover. This was mainly due to the rapid explosion of permutations that the "superboard" ends up with that are very hard to cover. There is also a baffling bug appearing on size 4 games where the game would end with spare tiles still remaining. I didn't manage to hunt it down regardless of what I tried.
