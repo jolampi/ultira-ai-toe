@@ -13,6 +13,39 @@ The AI player stores data from the results of passed games in a dictionary struc
 
 ### structure
 
+#### Dictionary.java
+|          | Dictionary() | set() | get() |
+|----------|--------------|-------|-------|
+| O(time)  | O(n)         | O(h)  | O(h)  |
+| O(space) | O(n)         | O(1)  | O(1)  |
+
+```javascript
+Dictionary()
+  buckets = [n]
+  elements = 0
+```
+Allocating an array is a linear operation.
+
+```javascript
+set(key, element)
+  if elements > FILL_PERCENT * buckets.length
+    moreBuckets()
+  addToBucket(key, element)
+  elements++
+  
+addToBucket()
+  bucket = getBucket(key)
+  // Find a proper node or create a new one in the end
+```
+Internal Array is doubled in size if too many enough elements are present, which will take linear time. This however doesn't happen too often. Finding the proper bucket is also a linear operation of going through a linked structure, but with proper hashing elements should spread quite evenly. Thus the main adversary is in the getBucket function where the time depends on the performance of the hashing function. So it effectively takes *O(h)* time but the amount of memory is amortized constant.
+
+```javascript
+get(key)
+  node = getNode(key)
+  return (node == null) ? null : node.element
+```
+Here our performance again depends on the efficiency of the hashing function.
+
 #### List.java
 |          | List()  | add() | get() | clear() |
 |----------|---------|-------|-------|---------|
