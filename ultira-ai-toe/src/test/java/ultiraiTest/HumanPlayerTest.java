@@ -5,7 +5,6 @@
  */
 package ultiraiTest;
 
-import java.io.ByteArrayInputStream;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import org.junit.Assert;

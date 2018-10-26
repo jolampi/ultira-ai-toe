@@ -64,6 +64,10 @@ final public class GameState {
         return activeX >= 0;
     }
     
+    /**
+     * @param move move being validated
+     * @return true if the move is valid
+     */
     public boolean isValidMove(int move) {
         int size = board.getSize();
         return isValidMove(move%size, move/size);
@@ -76,6 +80,9 @@ final public class GameState {
         return getActiveBoard().getMarkAt(x, y) == Mark.NONE;
     }
     
+    /**
+     * @return true if has any valid moves
+     */
     public boolean hasValidMoves() {
         int size = board.getSize();
         for (int y = 0; y < size; y++) {
@@ -86,10 +93,16 @@ final public class GameState {
         return false;
     }
     
+    /**
+     * @return active board
+     */
     public Board getActiveBoard() {
         return (isBoardActive()) ? board.getSubBoardAt(activeX, activeY) : board.getBoard();
     }
     
+    /**
+     * @return a list of valid moves
+     */
     public List<Integer> getValidMoves() {
         int size = board.getSize();
         List<Integer> moves = new List<>();
@@ -101,16 +114,24 @@ final public class GameState {
         return moves;
     }
     
+    /**
+     * @return winner of the board if there is one
+     */
     public Mark resolve() {
         return board.resolve();
     }
     
+    /**
+     * Returns the next GameState after the move is played.
+     * 
+     * @param move the move being played
+     * @return the next GameState after move
+     */
     public GameState next(int move) {
         int size = board.getSize();
-//        if (move < 0 || move >= size * size) { throw new IllegalArgumentException("Move out of bounds."); }
         int x = move % board.getSize();
         int y = move / board.getSize();
-        if (!isValidMove(x, y)) { throw new IllegalStateException("Illegal move."); }
+        if (!isValidMove(x, y)) { throw new IllegalArgumentException("Illegal move."); }
         if (!isBoardActive()) {
             return new GameState(board, turn, x, y);
         }

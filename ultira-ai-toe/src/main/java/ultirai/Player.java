@@ -6,11 +6,16 @@
 package ultirai;
 
 /**
- *
+ * The interface for player classes.
+ * 
  * @author Jori Lampi
  */
 public interface Player {
     
+    /**
+     * @param gameState the GameState where the move should be based on
+     * @return player's move
+     */
     public int move(GameState gameState);
     
 }

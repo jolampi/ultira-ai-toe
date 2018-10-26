@@ -19,7 +19,7 @@ import ultirai.HumanPlayer;
  */
 public class Main {
     
-    public static void main(String[] args) throws InterruptedException, ExecutionException {
+    public static void main(String[] args) {
         boolean demo = false;
         boolean benchmark = false;
         int threads = 2;
@@ -38,7 +38,11 @@ public class Main {
         AIPlayer ai = new AIPlayer(random, timer);
         
         if (benchmark) {
-            Game.benchMark(size, threads, timer);
+            try {
+                Game.benchMark(size, threads, timer);
+            } catch (InterruptedException | ExecutionException e) {
+                System.out.println("Something went wrong.");
+            }
         } else if (demo) {
             Game.play(size, ai, ai);
         } else if (random.nextBoolean()) {
