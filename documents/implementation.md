@@ -121,5 +121,17 @@ Mark resolve()
 ```
 This method attempts to determine the winner of the board by checking all possible *O(n + n + 2) = O(n)* rows. The helper method `resolveRow(...)` simply crawls along the given row while counting up to a sufficient streak, taking O(n) time to do so. In the worst case scenario no winner will be returned, taking this function *O(n^2)* time return the result. The method will only need a constant amount of variables however, so the space requirement is *O(1)*.
 
+
+#### SuperBoard.java
+
+|          | SuperBoard() | next() | toCharArray() |
+|----------|--------------|--------|---------------|
+| O(time)  | k\*n^2       | n^2    | n^4           |
+| O(space) | k\*n^2       | n^2    | n^4           |
+
+This class works in very similar fashion to *Board*. The main difference is that the dimensions are squared.
+
+
 ## Areas of improvement
 * Reduce the entropy of gamestates by detecting symmetries.
+* `resolve()` could be handled when a new board is created as one of the positions is known making the operation perform in *O(n)*. This wasn't done due to a lack of policy on deciding the winner if multiple rows exist.
