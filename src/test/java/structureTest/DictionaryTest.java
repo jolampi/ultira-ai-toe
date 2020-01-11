@@ -33,7 +33,7 @@ public class DictionaryTest {
     public void readAndWrite() {
         Dictionary<Long, Integer> dictionary = new Dictionary<>();
         Random random = new Random(1984);
-        for (int i = 0; i < 10000000; i++) {
+        for (int i = 0; i < 1000000; i++) {
             Long key = random.nextLong();
             Integer value = random.nextInt();
             dictionary.set(key, value);
